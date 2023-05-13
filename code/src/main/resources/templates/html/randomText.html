@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>随机文案</title>
+    <link rel="shortcut icon" href="#"/>
+
+    <script type="text/javascript" src="../js/Jquery.js"></script>
+    <script type="text/javascript" src="../js/jquerysession.js"></script>
+
+    <link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-4.5.0-dist/icons/bootstrap-icons.css">
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+
+    <!--bootstrap-table-->
+    <link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap-table.css">
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/bootstrap-table.js"></script>
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/colResizable-1.6.js"></script>
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/bootstrap-table-resizable.js"></script>
+
+    <link rel="stylesheet" href="../css/sweetalert.css">
+    <script type="text/javascript" src="../js/sweetalert-dev.js"></script>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="text/javascript" src="../js/main.js"></script>
+    <script type="text/javascript" src="../js/randomText.js"></script>
+</head>
+
+<body class="pt-2">
+<div class="top-toolbar row">
+    <div class="col-md-3 mb-2">
+        <input id="this_column" type="text" class="form-control" placeholder="产品名称" autocomplete="off">
+    </div>
+    <div class="col-md-2 mb-2">
+        <button id="select-btn" class="btn btn-primary">
+            <i class="bi bi-search icon"></i>
+            查询
+        </button>
+    </div>
+</div>
+
+<div id="table-toolbar">
+    <div class="btn-group" role="group">
+        <button id="refresh-btn" class="btn btn-primary">
+            <i class="bi bi-arrow-clockwise icon"></i>
+            刷新
+        </button>
+        <button id="add-btn" class="btn btn-primary">
+            <i class="bi bi-plus-square icon"></i>
+            新增
+        </button>
+        <button id="update-btn" class="btn btn-primary">
+            <i class="bi bi-pencil-square icon"></i>
+            修改
+        </button>
+        <button id="delete-btn" class="btn btn-primary">
+            <i class="bi bi-trash icon"></i>
+            删除
+        </button>
+        <button id="import-btn" class="btn btn-primary">
+            <i class="bi bi-arrow-bar-up"></i>
+            文件处理
+        </button>
+        <a class="btn btn-primary" style="color: white;padding-top: 8px">当前页：随机文案</a>
+    </div>
+</div>
+<input type="file" id="file" hidden="hidden">
+
+<div class="table-div border-top">
+    <table id="userTable"></table>
+</div>
+
+<div id="add-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">录入</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="form-group">
+                <input id="add-founder" name="founder" type="hidden" data-required="1">
+            </div>
+            <div class="form-group">
+                <input id="add-textId" name="textId" type="hidden" data-required="1">
+            </div>
+            <div class="modal-body">
+                <form id="add-form" class="needs-validation">
+                    <div class="form-group">
+                        <label for="add-product">产品名称</label>
+                        <input id="add-product" name="product" type="text" class="form-control" autocomplete="off">
+                        <div class="invalid-feedback">
+                            请输入产品名称！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-keyword">keyword</label>
+                        <input id="add-keyword" name="keyword" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入keyword！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-longword">longword</label>
+                        <input id="add-longword" name="longword" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入longword！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-scenario">scenario</label>
+                        <input id="add-scenario" name="scenario" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入scenario！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-user">user</label>
+                        <input id="add-user" name="user" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入user！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop1">prop1</label>
+                        <input id="add-prop1" name="prop1" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop1！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop2">prop2</label>
+                        <input id="add-prop2" name="prop2" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop2！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop3">prop3</label>
+                        <input id="add-prop3" name="prop3" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop3！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop4">prop4</label>
+                        <input id="add-prop4" name="prop4" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop4！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop5">prop5</label>
+                        <input id="add-prop5" name="prop5" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop5！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-luckword">luckword</label>
+                        <input id="add-luckword" name="luckword" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入luckword！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-point1">point1</label>
+                        <input id="add-point1" name="point1" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point1！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-point2">point2</label>
+                        <input id="add-point2" name="point2" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point2！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-point3">point3</label>
+                        <input id="add-point3" name="point3" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point3！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-point4">point4</label>
+                        <input id="add-point4" name="point4" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point4！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-point5">point5</label>
+                        <input id="add-point5" name="point5" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point5！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-description">description</label>
+                        <input id="add-description" name="description" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入description！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop6">prop6</label>
+                        <input id="add-prop6" name="prop6" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop6！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop7">prop7</label>
+                        <input id="add-prop7" name="prop7" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop7！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop8">prop8</label>
+                        <input id="add-prop8" name="prop8" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop8！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop9">prop9</label>
+                        <input id="add-prop9" name="prop9" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop9！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop10">prop10</label>
+                        <input id="add-prop10" name="prop10" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop10！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop11">prop11</label>
+                        <input id="add-prop11" name="prop11" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop11！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop12">prop12</label>
+                        <input id="add-prop12" name="prop12" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop12！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop13">prop13</label>
+                        <input id="add-prop13" name="prop13" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop13！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop14">prop14</label>
+                        <input id="add-prop14" name="prop14" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop14！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop15">prop15</label>
+                        <input id="add-prop15" name="prop15" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop15！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop16">prop16</label>
+                        <input id="add-prop16" name="prop16" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop16！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop17">prop17</label>
+                        <input id="add-prop17" name="prop17" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop17！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop18">prop18</label>
+                        <input id="add-prop18" name="prop18" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop18！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop19">prop19</label>
+                        <input id="add-prop19" name="prop19" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop19！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-prop20">prop20</label>
+                        <input id="add-prop20" name="prop20" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop20！
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="border-top" style="padding: 15px;">
+                <button id="add-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    提交
+                </button>
+                <button id="add-close-btn" type="button" class="btn btn-primary left-margin">
+                    <i class="bi bi-x-circle icon"></i>
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="update-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">编辑</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="update-form" class="needs-validation">
+                    <div class="form-group">
+                        <input id="id" name="id" type="hidden">
+                    </div>
+                    <div class="form-group">
+                        <input id="update-founder" name="founder" type="hidden" data-required="1">
+                    </div>
+                    <div class="form-group">
+                        <input id="update-textId" name="textId" type="hidden" data-required="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-product">产品名称</label>
+                        <input id="update-product" name="product" type="text" class="form-control" autocomplete="off">
+                        <div class="invalid-feedback">
+                            请输入产品名称！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-keyword">keyword</label>
+                        <input id="update-keyword" name="keyword" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入keyword！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-longword">longword</label>
+                        <input id="update-longword" name="longword" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入longword！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-scenario">scenario</label>
+                        <input id="update-scenario" name="scenario" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入scenario！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-user">user</label>
+                        <input id="update-user" name="user" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入user！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop1">prop1</label>
+                        <input id="update-prop1" name="prop1" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop1！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop2">prop2</label>
+                        <input id="update-prop2" name="prop2" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop2！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop3">prop3</label>
+                        <input id="update-prop3" name="prop3" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop3！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop4">prop4</label>
+                        <input id="update-prop4" name="prop4" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop4！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop5">prop5</label>
+                        <input id="update-prop5" name="prop5" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop5！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-luckword">luckword</label>
+                        <input id="update-luckword" name="luckword" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入luckword！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-point1">point1</label>
+                        <input id="update-point1" name="point1" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point1！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-point2">point2</label>
+                        <input id="update-point2" name="point2" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point2！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-point3">point3</label>
+                        <input id="update-point3" name="point3" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point3！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-point4">point4</label>
+                        <input id="update-point4" name="point4" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point4！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-point5">point5</label>
+                        <input id="update-point5" name="point5" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入point5！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-description">description</label>
+                        <input id="update-description" name="description" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入description！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop6">prop6</label>
+                        <input id="update-prop6" name="prop6" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop6！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop7">prop7</label>
+                        <input id="update-prop7" name="prop7" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop7！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop8">prop8</label>
+                        <input id="update-prop8" name="prop8" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop8！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop9">prop9</label>
+                        <input id="update-prop9" name="prop9" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop9！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop10">prop10</label>
+                        <input id="update-prop10" name="prop10" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop10！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop11">prop11</label>
+                        <input id="update-prop11" name="prop11" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop11！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop12">prop12</label>
+                        <input id="update-prop12" name="prop12" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop12！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop13">prop13</label>
+                        <input id="update-prop13" name="prop13" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop13！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop14">prop14</label>
+                        <input id="update-prop14" name="prop14" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop14！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop15">prop15</label>
+                        <input id="update-prop15" name="prop15" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop15！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop16">prop16</label>
+                        <input id="update-prop16" name="prop16" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop16！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop17">prop16</label>
+                        <input id="update-prop17" name="prop17" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop17！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop18">prop18</label>
+                        <input id="update-prop18" name="prop18" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop18！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop19">prop19</label>
+                        <input id="update-prop19" name="prop19" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop19！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-prop20">prop20</label>
+                        <input id="update-prop20" name="prop20" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <div class="invalid-feedback">
+                            请输入prop20！
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="border-top" style="padding: 15px;">
+                <button id="update-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    提交
+                </button>
+                <button id="update-close-btn" type="button" class="btn btn-primary left-margin">
+                    <i class="bi bi-x-circle icon"></i>
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="delete-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">提示</div>
+            </div>
+            <div id="delete-modal-body" class="modal-body">
+                确定删除吗？
+            </div>
+            <div class="border-top" style="padding: 15px;">
+                <button id="delete-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    确定
+                </button>
+                <button id="delete-close-btn" type="button" class="btn btn-primary left-margin">
+                    <i class="bi bi-x-circle icon"></i>
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- loading -->
+<div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop='static'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">提示</h4>
+            </div>
+            <div class="modal-body">
+                文件生成中，请稍候。<span id="result"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
