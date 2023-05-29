@@ -14,10 +14,6 @@ public class Infringement {
     @TableId(value = "id" , type = IdType.AUTO)
     private Integer id;
     /**
-     * 产品名称
-     */
-    private String product;
-    /**
      * 侵权词
      */
     private String text;

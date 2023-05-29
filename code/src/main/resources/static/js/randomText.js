@@ -53,7 +53,40 @@ $(function () {
 
     //新增弹窗里点击提交按钮
     $("#add-submit-btn").click(function () {
-        let params = formToJson("#add-form");
+        let params = {
+            product:document.getElementById("add-product").value.replaceAll("\n","<br><br>"),
+            keyword:document.getElementById("add-keyword").value.replaceAll("\n","<br><br>"),
+            longword:document.getElementById("add-longword").value.replaceAll("\n","<br><br>"),
+            scenario:document.getElementById("add-scenario").value.replaceAll("\n","<br><br>"),
+            user:document.getElementById("add-user").value.replaceAll("\n","<br><br>"),
+            prop1:document.getElementById("add-prop1").value.replaceAll("\n","<br><br>"),
+            prop2:document.getElementById("add-prop2").value.replaceAll("\n","<br><br>"),
+            prop3:document.getElementById("add-prop3").value.replaceAll("\n","<br><br>"),
+            prop4:document.getElementById("add-prop4").value.replaceAll("\n","<br><br>"),
+            prop5:document.getElementById("add-prop5").value.replaceAll("\n","<br><br>"),
+            luckword:document.getElementById("add-luckword").value.replaceAll("\n","<br><br>"),
+            point1:document.getElementById("add-point1").value.replaceAll("\n","<br><br>"),
+            point2:document.getElementById("add-point2").value.replaceAll("\n","<br><br>"),
+            point3:document.getElementById("add-point3").value.replaceAll("\n","<br><br>"),
+            point4:document.getElementById("add-point4").value.replaceAll("\n","<br><br>"),
+            point5:document.getElementById("add-point5").value.replaceAll("\n","<br><br>"),
+            description:document.getElementById("add-description").value.replaceAll("\n","<br><br>"),
+            prop6:document.getElementById("add-prop6").value.replaceAll("\n","<br><br>"),
+            prop7:document.getElementById("add-prop7").value.replaceAll("\n","<br><br>"),
+            prop8:document.getElementById("add-prop8").value.replaceAll("\n","<br><br>"),
+            prop9:document.getElementById("add-prop9").value.replaceAll("\n","<br><br>"),
+            prop10:document.getElementById("add-prop10").value.replaceAll("\n","<br><br>"),
+            prop11:document.getElementById("add-prop11").value.replaceAll("\n","<br><br>"),
+            prop12:document.getElementById("add-prop12").value.replaceAll("\n","<br><br>"),
+            prop13:document.getElementById("add-prop13").value.replaceAll("\n","<br><br>"),
+            prop14:document.getElementById("add-prop14").value.replaceAll("\n","<br><br>"),
+            prop15:document.getElementById("add-prop15").value.replaceAll("\n","<br><br>"),
+            prop16:document.getElementById("add-prop16").value.replaceAll("\n","<br><br>"),
+            prop17:document.getElementById("add-prop17").value.replaceAll("\n","<br><br>"),
+            prop18:document.getElementById("add-prop18").value.replaceAll("\n","<br><br>"),
+            prop19:document.getElementById("add-prop19").value.replaceAll("\n","<br><br>"),
+            prop20:document.getElementById("add-prop20").value.replaceAll("\n","<br><br>"),
+        }
         if (checkForm('#add-form')) {
             $ajax({
                 type: 'post',
@@ -98,7 +131,41 @@ $(function () {
         var msg = confirm("确认要修改吗？");
         if (msg) {
             if (checkForm('#update-form')) {
-                let params = formToJson('#update-form');
+                let params = {
+                    id:document.getElementById("id").value.replaceAll("\n","<br><br>"),
+                    product:document.getElementById("update-product").value.replaceAll("\n","<br><br>"),
+                    keyword:document.getElementById("update-keyword").value.replaceAll("\n","<br><br>"),
+                    longword:document.getElementById("update-longword").value.replaceAll("\n","<br><br>"),
+                    scenario:document.getElementById("update-scenario").value.replaceAll("\n","<br><br>"),
+                    user:document.getElementById("update-user").value.replaceAll("\n","<br><br>"),
+                    prop1:document.getElementById("update-prop1").value.replaceAll("\n","<br><br>"),
+                    prop2:document.getElementById("update-prop2").value.replaceAll("\n","<br><br>"),
+                    prop3:document.getElementById("update-prop3").value.replaceAll("\n","<br><br>"),
+                    prop4:document.getElementById("update-prop4").value.replaceAll("\n","<br><br>"),
+                    prop5:document.getElementById("update-prop5").value.replaceAll("\n","<br><br>"),
+                    luckword:document.getElementById("update-luckword").value.replaceAll("\n","<br><br>"),
+                    point1:document.getElementById("update-point1").value.replaceAll("\n","<br><br>"),
+                    point2:document.getElementById("update-point2").value.replaceAll("\n","<br><br>"),
+                    point3:document.getElementById("update-point3").value.replaceAll("\n","<br><br>"),
+                    point4:document.getElementById("update-point4").value.replaceAll("\n","<br><br>"),
+                    point5:document.getElementById("update-point5").value.replaceAll("\n","<br><br>"),
+                    description:document.getElementById("update-description").value.replaceAll("\n","<br><br>"),
+                    prop6:document.getElementById("update-prop6").value.replaceAll("\n","<br><br>"),
+                    prop7:document.getElementById("update-prop7").value.replaceAll("\n","<br><br>"),
+                    prop8:document.getElementById("update-prop8").value.replaceAll("\n","<br><br>"),
+                    prop9:document.getElementById("update-prop9").value.replaceAll("\n","<br><br>"),
+                    prop10:document.getElementById("update-prop10").value.replaceAll("\n","<br><br>"),
+                    prop11:document.getElementById("update-prop11").value.replaceAll("\n","<br><br>"),
+                    prop12:document.getElementById("update-prop12").value.replaceAll("\n","<br><br>"),
+                    prop13:document.getElementById("update-prop13").value.replaceAll("\n","<br><br>"),
+                    prop14:document.getElementById("update-prop14").value.replaceAll("\n","<br><br>"),
+                    prop15:document.getElementById("update-prop15").value.replaceAll("\n","<br><br>"),
+                    prop16:document.getElementById("update-prop16").value.replaceAll("\n","<br><br>"),
+                    prop17:document.getElementById("update-prop17").value.replaceAll("\n","<br><br>"),
+                    prop18:document.getElementById("update-prop18").value.replaceAll("\n","<br><br>"),
+                    prop19:document.getElementById("update-prop19").value.replaceAll("\n","<br><br>"),
+                    prop20:document.getElementById("update-prop20").value.replaceAll("\n","<br><br>"),
+                }
                 $ajax({
                     type: 'post',
                     url: '/randomText/update',
@@ -164,22 +231,37 @@ $(function () {
         $('#loading').modal('show');
         var url = null;
         if ($('#file').val() != '') {
-            if ($('#file').val().substr(-5) == '.xlsx') {
+            if ($('#file').val().substr(-5) == '.xlsx' || $('#file').val().substr(-4) == '.xls') {
                 var nameArr = $('#file').val().split("\\")
-                nameArr = nameArr[nameArr.length - 1].replace(".xlsx","")
+                var houzhui = ""
+                if($('#file').val().substr(-5) == '.xlsx'){
+                    nameArr = nameArr[nameArr.length - 1].replace(".xlsx","")
+                    houzhui = ".xlsx"
+                }
+                if($('#file').val().substr(-4) == '.xls'){
+                    nameArr = nameArr[nameArr.length - 1].replace(".xls","")
+                    houzhui = ".xls"
+                }
                 console.log(nameArr)
                 var excel = document.getElementById("file").files[0]
                 var oFReader = new FileReader();
                 oFReader.readAsDataURL(excel);
                 oFReader.onloadend = function (oFRevent) {
                     url = oFRevent.target.result;
+                    var data = {
+                        excel: url,
+                        name: nameArr,
+                        houzhui: houzhui,
+                    }
                     $ajax({
                         type: 'post',
                         url: '/randomText/upload',
-                        data: {
-                            excel: url,
-                            name: nameArr
-                        },
+                        data: JSON.stringify({
+                            addInfo: data,
+                        }),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8'
+
                     }, false, '', function (res) {
                         console.log(res)
                         var thisBase = res.data
@@ -229,7 +311,7 @@ function setTable(data) {
                 field: '',
                 title: '序号',
                 align: 'center',
-                width: 70,
+                width: 30,
                 formatter: function (value, row, index) {
                     return index + 1;
                 }
@@ -239,192 +321,6 @@ function setTable(data) {
                 align: 'center',
                 sortable: true,
                 width: 150,
-            }, {
-                field: 'keyword',
-                title: 'keyword',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'longword',
-                title: 'longword',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'scenario',
-                title: 'scenario',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'user',
-                title: 'user',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop1',
-                title: 'prop1',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop2',
-                title: 'prop2',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop3',
-                title: 'prop3',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop4',
-                title: 'prop4',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop5',
-                title: 'prop5',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'luckword',
-                title: 'luckword',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'point1',
-                title: 'point1',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'point2',
-                title: 'point2',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'point3',
-                title: 'point3',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'point4',
-                title: 'point4',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'point5',
-                title: 'point5',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'description',
-                title: 'description',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop6',
-                title: 'prop6',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop7',
-                title: 'prop7',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop8',
-                title: 'prop8',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop9',
-                title: 'prop9',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop10',
-                title: 'prop10',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop11',
-                title: 'prop11',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop12',
-                title: 'prop12',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop13',
-                title: 'prop13',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop14',
-                title: 'prop14',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop15',
-                title: 'prop15',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop16',
-                title: 'prop16',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop17',
-                title: 'prop17',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop18',
-                title: 'prop18',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop19',
-                title: 'prop19',
-                align: 'center',
-                sortable: true,
-                width: 100,
-            }, {
-                field: 'prop20',
-                title: 'prop20',
-                align: 'center',
-                sortable: true,
-                width: 100,
             }
         ],
         onClickRow: function (row, el) {

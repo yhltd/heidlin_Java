@@ -177,7 +177,7 @@ function setTable(data) {
                 field: '',
                 title: '序号',
                 align: 'center',
-                width: 30,
+                width: 50,
                 formatter: function (value, row, index) {
                     return index + 1;
                 }
@@ -186,19 +186,177 @@ function setTable(data) {
                 title: '产品名称',
                 align: 'center',
                 sortable: true,
-                width: 150,
+                width: 100,
             }, {
                 field: 'columntext',
-                title: '列名',
+                title: '列标/数量规定',
                 align: 'center',
                 sortable: true,
-                width: 80,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[0]
+                    var this_num = row.num.split("<br><br>")[0]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
             }, {
-                field: 'num',
-                title: '数量规定',
+                field: 'columntext',
+                title: '列标/数量规定',
                 align: 'center',
                 sortable: true,
-                width: 80,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[1]
+                    var this_num = row.num.split("<br><br>")[1]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
+            }, {
+                field: 'columntext',
+                title: '列标/数量规定',
+                align: 'center',
+                sortable: true,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[2]
+                    var this_num = row.num.split("<br><br>")[2]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
+            }, {
+                field: 'columntext',
+                title: '列标/数量规定',
+                align: 'center',
+                sortable: true,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[3]
+                    var this_num = row.num.split("<br><br>")[3]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
+            }, {
+                field: 'columntext',
+                title: '列标/数量规定',
+                align: 'center',
+                sortable: true,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[4]
+                    var this_num = row.num.split("<br><br>")[4]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
+            }, {
+                field: 'columntext',
+                title: '列标/数量规定',
+                align: 'center',
+                sortable: true,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[5]
+                    var this_num = row.num.split("<br><br>")[5]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
+            }, {
+                field: 'columntext',
+                title: '列标/数量规定',
+                align: 'center',
+                sortable: true,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[6]
+                    var this_num = row.num.split("<br><br>")[6]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
+            }, {
+                field: 'columntext',
+                title: '列标/数量规定',
+                align: 'center',
+                sortable: true,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[7]
+                    var this_num = row.num.split("<br><br>")[7]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
+            }, {
+                field: 'columntext',
+                title: '列标/数量规定',
+                align: 'center',
+                sortable: true,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[8]
+                    var this_num = row.num.split("<br><br>")[8]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
+            }, {
+                field: 'columntext',
+                title: '列标/数量规定',
+                align: 'center',
+                sortable: true,
+                width:150,
+                formatter: function (value, row, index) {
+                    var this_columntext = row.columntext.split("<br><br>")[9]
+                    var this_num = row.num.split("<br><br>")[9]
+                    if(this_columntext == undefined){
+                        this_columntext = ""
+                    }
+                    if(this_num == undefined){
+                        this_num = ""
+                    }
+                    return this_columntext + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + this_num
+                }
             }
         ],
         onClickRow: function (row, el) {

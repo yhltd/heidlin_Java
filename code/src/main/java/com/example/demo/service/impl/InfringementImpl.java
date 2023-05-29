@@ -38,12 +38,12 @@ public class InfringementImpl extends ServiceImpl<InfringementMapper, Infringeme
 
     @Override
     public boolean insert(Infringement infringement) {
-        return infringementMapper.insert(infringement.getProduct(),infringement.getText(),infringement.getReplaceText());
+        return infringementMapper.insert(infringement.getText(),infringement.getReplaceText());
     }
 
     @Override
-    public boolean update(String product,String text,String replaceText,int id) {
-        return infringementMapper.update(product,text,replaceText,id);
+    public boolean update(String text,String replaceText,int id) {
+        return infringementMapper.update(text,replaceText,id);
     }
 
     @Override

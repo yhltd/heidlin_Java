@@ -182,12 +182,6 @@ function setTable(data) {
                     return index + 1;
                 }
             }, {
-                field: 'product',
-                title: '产品名称',
-                align: 'center',
-                sortable: true,
-                width: 150,
-            }, {
                 field: 'text',
                 title: '侵权词',
                 align: 'center',

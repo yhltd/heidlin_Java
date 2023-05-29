@@ -41,6 +41,11 @@ public interface TextRestrictionsService extends IService<TextRestrictions> {
     List<TextRestrictions> getMaxId();
 
     /**
+     * 查询产品名称
+     */
+    List<TextRestrictions> getName(String founder,String product);
+
+    /**
      * 添加
      */
     TextRestrictions add(TextRestrictions textRestrictions);

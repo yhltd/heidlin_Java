@@ -40,6 +40,11 @@ public interface RandomTextService extends IService<RandomText> {
     List<RandomText> getMaxId();
 
     /**
+     * 查询相同名称
+     */
+    List<RandomText> getName(String founder,String product);
+
+    /**
      * 添加
      */
     RandomText add(RandomText randomText);

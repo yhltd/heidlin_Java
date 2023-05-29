@@ -79,22 +79,15 @@
             <div class="modal-body">
                 <form id="add-form" class="needs-validation">
                     <div class="form-group">
-                        <label for="add-product">产品名称</label>
-                        <input id="add-product" name="product" type="text" class="form-control" autocomplete="off">
-                        <div class="invalid-feedback">
-                            请输入产品名称！
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label for="add-text">侵权词</label>
-                        <input id="add-text" name="text" type="text" class="form-control" autocomplete="off">
+                        <textarea id="add-text" rows="5" placeholder="请填写侵权词(一行一个)" name="text" type="text" class="form-control" autocomplete="off"></textarea>
                         <div class="invalid-feedback">
                             请输入侵权词！
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="add-replaceText">替换词</label>
-                        <input id="add-replaceText" name="replaceText" type="text" class="form-control" autocomplete="off" data-required="1">
+                        <textarea id="add-replaceText" rows="5" placeholder="请填写替换词(一行一个)" name="replaceText" type="text" class="form-control" autocomplete="off" data-required="1"></textarea>
                         <div class="invalid-feedback">
                             请输入替换词！
                         </div>
@@ -129,13 +122,6 @@
                 <form id="update-form" class="needs-validation">
                     <div class="form-group">
                         <input id="id" name="id" type="hidden">
-                    </div>
-                    <div class="form-group">
-                        <label for="update-product">产品名称</label>
-                        <input id="update-product" name="product" type="text" class="form-control" autocomplete="off">
-                        <div class="invalid-feedback">
-                            请输入产品名称！
-                        </div>
                     </div>
                     <div class="form-group">
                         <label for="update-text">侵权词</label>

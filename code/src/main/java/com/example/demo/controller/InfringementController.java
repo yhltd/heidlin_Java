@@ -79,7 +79,21 @@ public class InfringementController {
         GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
         try {
             Infringement infringement = GsonUtil.toEntity(gsonUtil.get("addInfo"), Infringement.class);
-            infringementService.insert(infringement);
+            String text = infringement.getText();
+            String replaceText = infringement.getReplaceText();
+            String[] textArr = text.split("<br><br>");
+            String[] replaceTextArr = replaceText.split("<br><br>");
+            int thisLen = textArr.length;
+            for(int i=0; i<thisLen; i++){
+                Infringement infringementItem = new Infringement();
+                infringementItem.setText(textArr[i]);
+                if(i <= replaceTextArr.length-1){
+                    infringementItem.setReplaceText(replaceTextArr[i]);
+                }else{
+                    infringementItem.setReplaceText("");
+                }
+                infringementService.insert(infringementItem);
+            }
             return ResultInfo.success("添加成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,7 +112,7 @@ public class InfringementController {
         Infringement infringement = null;
         try {
             infringement = DecodeUtil.decodeToJson(updateJson, Infringement.class);
-            infringementService.update(infringement.getProduct(),infringement.getText(),infringement.getReplaceText(),infringement.getId());
+            infringementService.update(infringement.getText(),infringement.getReplaceText(),infringement.getId());
             return ResultInfo.success("修改成功", infringement);
         } catch (Exception e) {
             e.printStackTrace();

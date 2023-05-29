@@ -18,12 +18,12 @@ public interface InfringementMapper extends BaseMapper<Infringement> {
     @Select("select * from infringement")
     List<Infringement> getList();
 
-    @Insert("insert into infringement(product,text,replace_text) values(#{product},#{text},#{replaceText})")
-    boolean insert(String product,String text,String replaceText);
+    @Insert("insert into infringement(text,replace_text) values(#{text},#{replaceText})")
+    boolean insert(String text,String replaceText);
 
     @Select("select * from infringement where product like '%'+#{this_column}+'%'")
     List<Infringement> queryList(String this_column);
 
-    @Update("update infringement set product = #{product},text = #{text},replace_text = #{replaceText} where id= #{id}")
-    boolean update(String product,String text,String replaceText,int id);
+    @Update("update infringement set text = #{text},replace_text = #{replaceText} where id= #{id}")
+    boolean update(String text,String replaceText,int id);
 }

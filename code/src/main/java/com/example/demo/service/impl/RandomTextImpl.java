@@ -47,6 +47,11 @@ public class RandomTextImpl extends ServiceImpl<RandomTextMapper, RandomText> im
     }
 
     @Override
+    public List<RandomText> getName(String founder,String product) {
+        return randomTextMapper.getName(founder,product);
+    }
+
+    @Override
     public RandomText add(RandomText randomText) {
         return save(randomText) ? randomText : null;
     }

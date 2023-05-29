@@ -37,7 +37,7 @@ public interface InfringementService extends IService<Infringement> {
     /**
      * 修改
      */
-    boolean update(String product,String text,String replaceText,int id);
+    boolean update(String text,String replaceText,int id);
 
     /**
      * 删除

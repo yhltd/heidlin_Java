@@ -44,6 +44,11 @@ public class TextRestrictionsImpl extends ServiceImpl<TextRestrictionsMapper, Te
     }
 
     @Override
+    public List<TextRestrictions> getName(String founder,String product) {
+        return textRestrictionsMapper.getName(founder,product);
+    }
+
+    @Override
     public TextRestrictions add(TextRestrictions textRestrictions) {
         return save(textRestrictions) ? textRestrictions : null;
     }

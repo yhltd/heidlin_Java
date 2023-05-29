@@ -109,19 +109,25 @@ public class TextRestrictionsController {
             }else{
                 textRestrictions.setFounder(userInfo.getId().toString());
             }
-            textRestrictionsService.insert(textRestrictions);
-            if(userInfo.getPower().equals("管理员")){
-                List<TextRestrictions> idList = textRestrictionsService.getMaxId();
-                List<UserInfo> userList =  userInfoService.getUserList();
-                if(userList.size() > 0){
-                    for(int i=0; i<userList.size(); i++){
-                        textRestrictions.setFounder(userList.get(i).getId().toString());
-                        textRestrictions.setTextId(idList.get(0).getId());
-                        textRestrictionsService.insertById(textRestrictions);
+            List<TextRestrictions> nameList = textRestrictionsService.getName(textRestrictions.getFounder(),textRestrictions.getProduct());
+            if(nameList.size() == 0){
+                textRestrictionsService.insert(textRestrictions);
+                if(userInfo.getPower().equals("管理员")){
+                    List<TextRestrictions> idList = textRestrictionsService.getMaxId();
+                    List<UserInfo> userList =  userInfoService.getUserList();
+                    if(userList.size() > 0){
+                        for(int i=0; i<userList.size(); i++){
+                            textRestrictions.setFounder(userList.get(i).getId().toString());
+                            textRestrictions.setTextId(idList.get(0).getId());
+                            textRestrictionsService.insertById(textRestrictions);
+                        }
                     }
                 }
+                return ResultInfo.success("添加成功");
+            }else{
+                return ResultInfo.error("已有相同产品名称的配置，请检查");
             }
-            return ResultInfo.success("添加成功");
+
         } catch (Exception e) {
             e.printStackTrace();
             log.error("添加失败：{}", e.getMessage());

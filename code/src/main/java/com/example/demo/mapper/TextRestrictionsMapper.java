@@ -36,6 +36,9 @@ public interface TextRestrictionsMapper extends BaseMapper<TextRestrictions> {
     @Select("SELECT max(id) as id from textRestrictions")
     List<TextRestrictions> getMaxId();
 
+    @Select("SELECT product from textRestrictions where founder = #{founder} and product = #{product}")
+    List<TextRestrictions> getName(String founder,String product);
+
     @Update("update textRestrictions set columntext = #{columntext},num = #{num},product = #{product} where id= #{id}")
     boolean update(String columntext,String num,int id,String product);
 

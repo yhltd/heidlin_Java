@@ -71,11 +71,25 @@ function formToJson(el) {
     return JSON.parse(deCode);
 }
 
+function formToJson2(el) {
+    let formData = $(el).serialize();
+    let deCode = decodeURIComponent(formData);
+    deCode = deCode.replace(/=/g, "\":\"").replace(/\+/g, " ").replace(/[\r\n]/g, "<br>");
+    deCode = "{\"" + deCode + "\"}";
+    return JSON.parse(deCode);
+}
+
 function setForm(params, el) {
     for (let param in params) {
         $(el + ' input').each(function (index, input) {
             if ($(input).attr('name') == param) {
                 $(input).val(params[param]);
+                return false;
+            }
+        })
+        $(el + ' textarea').each(function (index, input) {
+            if ($(input).attr('name') == param) {
+                $(input).val(params[param].replaceAll("<br><br>","\n"));
                 return false;
             }
         })
@@ -122,6 +136,18 @@ function checkForm(el) {
             result = false
         }else{
             $(select).next().css('display','none');
+        }
+    });
+    $(el + ' textarea').each(function(index,input){
+        let isRequired = $(input).data('required');
+        if(isRequired == "1"){
+            return true;
+        }
+        if($(input).val() == '' || $(input).val() <= 0){
+            $(input).next().css('display','block');
+            result = false
+        }else{
+            $(input).next().css('display','none');
         }
     });
     return result;
