@@ -18,14 +18,20 @@ public interface TextRestrictionsMapper extends BaseMapper<TextRestrictions> {
     @Select("select * from textRestrictions where founder = '管理员'")
     List<TextRestrictions> getList();
 
+    @Select("select * from textRestrictions where id = #{id}")
+    List<TextRestrictions> getMuBan(int id);
+
     @Select("select * from textRestrictions where founder = #{founder}")
     List<TextRestrictions> getListByUser(String founder);
 
-    @Insert("insert into textRestrictions(columntext,num,founder,text_id,product) values(#{this_column},#{num},#{founder},#{textId},#{product})")
-    boolean insertById(String this_column,String num,String founder,int textId,String product);
+    @Select("select * from textRestrictions where id = #{id}")
+    List<TextRestrictions> getListById(int id);
 
-    @Insert("insert into textRestrictions(columntext,num,founder,product) output inserted.id values(#{this_column},#{num},#{founder},#{product})")
-    boolean insert(String this_column,String num,String founder,String product);
+    @Insert("insert into textRestrictions(founder,text_id) values(#{founder},#{textId})")
+    boolean insertById(String founder,int textId);
+
+    @Insert("insert into textRestrictions(founder) output inserted.id values(#{founder})")
+    boolean insert(String founder);
 
     @Select("select * from textRestrictions where product like '%'+#{this_column}+'%' and founder = '管理员'")
     List<TextRestrictions> queryList(String this_column);
@@ -39,11 +45,17 @@ public interface TextRestrictionsMapper extends BaseMapper<TextRestrictions> {
     @Select("SELECT product from textRestrictions where founder = #{founder} and product = #{product}")
     List<TextRestrictions> getName(String founder,String product);
 
-    @Update("update textRestrictions set columntext = #{columntext},num = #{num},product = #{product} where id= #{id}")
-    boolean update(String columntext,String num,int id,String product);
+    @Update("update textRestrictions set ${column} = #{value} where id= #{id}")
+    boolean update(String column,String value,int id);
 
-    @Update("update textRestrictions set columntext = #{columntext},num = #{num},product = #{product} where text_id = #{id}")
-    boolean updateById(String columntext,String num,int id,String product);
+    @Update("update textRestrictions set ${column} = #{value} where text_id = #{textId}")
+    boolean updateById(String column,String value,int textId);
+
+    @Update("update textRestrictions set product= #{product},title= #{title},title_color= #{titleColor},keyword= #{keyword},longword= #{longword},scenario= #{scenario},[user]= #{user},prop1= #{prop1},prop2= #{prop2},prop3= #{prop3},prop4= #{prop4},prop5= #{prop5},luckword= #{luckword},point1= #{point1},point2= #{point2},point3= #{point3},point4= #{point4},point5= #{point5},description= #{description},prop6= #{prop6},prop7= #{prop7},prop8= #{prop8},prop9= #{prop9},prop10= #{prop10},prop11= #{prop11},prop12= #{prop12},prop13= #{prop13},prop14= #{prop14},prop15= #{prop15},prop16= #{prop16},prop17= #{prop17},prop18= #{prop18},prop19= #{prop19},prop20= #{prop20} where id= #{id}")
+    boolean updateMuBan(String keyword,String longword,String scenario,String user,String prop1,String prop2,String prop3,String prop4,String prop5,String luckword,String point1,String point2,String point3,String point4,String point5,String description,String prop6,String prop7,String prop8,String prop9,String prop10,String prop11,String prop12,String prop13,String prop14,String prop15,String prop16,String prop17,String prop18,String prop19,String prop20,int id,String product,String title,String titleColor);
+
+    @Update("update textRestrictions set product= #{product},title= #{title},title_color= #{titleColor},keyword= #{keyword},longword= #{longword},scenario= #{scenario},[user]= #{user},prop1= #{prop1},prop2= #{prop2},prop3= #{prop3},prop4= #{prop4},prop5= #{prop5},luckword= #{luckword},point1= #{point1},point2= #{point2},point3= #{point3},point4= #{point4},point5= #{point5},description= #{description},prop6= #{prop6},prop7= #{prop7},prop8= #{prop8},prop9= #{prop9},prop10= #{prop10},prop11= #{prop11},prop12= #{prop12},prop13= #{prop13},prop14= #{prop14},prop15= #{prop15},prop16= #{prop16},prop17= #{prop17},prop18= #{prop18},prop19= #{prop19},prop20= #{prop20} where text_id = #{id}")
+    boolean updateMuBanById(String keyword,String longword,String scenario,String user,String prop1,String prop2,String prop3,String prop4,String prop5,String luckword,String point1,String point2,String point3,String point4,String point5,String description,String prop6,String prop7,String prop8,String prop9,String prop10,String prop11,String prop12,String prop13,String prop14,String prop15,String prop16,String prop17,String prop18,String prop19,String prop20,int id,String product,String title,String titleColor);
 
     @Delete("delete from textRestrictions where text_id=#{id}")
     boolean deleteid(int id);

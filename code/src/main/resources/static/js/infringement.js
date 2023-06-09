@@ -53,8 +53,11 @@ $(function () {
 
     //新增弹窗里点击提交按钮
     $("#add-submit-btn").click(function () {
-        let params = formToJson("#add-form");
         if (checkForm('#add-form')) {
+            let params = {
+                text:document.getElementById("add-text").value.replaceAll("\n","<br><br>"),
+                replaceText:document.getElementById("add-replaceText").value.replaceAll("\n","<br><br>"),
+            }
             $ajax({
                 type: 'post',
                 url: '/infringement/add',
@@ -62,7 +65,8 @@ $(function () {
                     addInfo: params,
                 }),
                 dataType: 'json',
-                contentType: 'application/json;charset=utf-8'
+                contentType: 'application/json;charset=utf-8',
+                async: false,
             }, false, '', function (res) {
                 if (res.code == 200) {
                     swal("", res.msg, "success");

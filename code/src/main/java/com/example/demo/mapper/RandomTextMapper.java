@@ -38,7 +38,7 @@ public interface RandomTextMapper extends BaseMapper<RandomText> {
     @Select("SELECT max(id) as id from randomText")
     List<RandomText> getMaxId();
 
-    @Select("SELECT product from randomText where founder = '#{founder} and product = #{product}")
+    @Select("SELECT product from randomText where founder = #{founder} and product = #{product}")
     List<RandomText> getName(String founder,String product);
 
     @Update("update randomText set keyword= #{keyword},longword= #{longword},scenario= #{scenario},[user]= #{user},prop1= #{prop1},prop2= #{prop2},prop3= #{prop3},prop4= #{prop4},prop5= #{prop5},luckword= #{luckword},point1= #{point1},point2= #{point2},point3= #{point3},point4= #{point4},point5= #{point5},description= #{description},prop6= #{prop6},prop7= #{prop7},prop8= #{prop8},prop9= #{prop9},prop10= #{prop10},prop11= #{prop11},prop12= #{prop12},prop13= #{prop13},prop14= #{prop14},prop15= #{prop15},prop16= #{prop16},prop17= #{prop17},prop18= #{prop18},prop19= #{prop19},prop20= #{prop20},product= #{product} where id= #{id}")

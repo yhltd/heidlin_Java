@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>字符数限制</title>
+    <title>产品设置</title>
     <link rel="shortcut icon" href="#"/>
 
     <script type="text/javascript" src="../js/Jquery.js"></script>
@@ -49,18 +49,23 @@
         </button>
         <button id="add-btn" class="btn btn-primary">
             <i class="bi bi-plus-square icon"></i>
-            新增
-        </button>
-        <button id="update-btn" class="btn btn-primary">
-            <i class="bi bi-pencil-square icon"></i>
-            修改
+            新增一行
         </button>
         <button id="delete-btn" class="btn btn-primary">
             <i class="bi bi-trash icon"></i>
             删除
         </button>
-        <a class="btn btn-primary" style="color: white;padding-top: 8px">当前页：字符数限制</a>
+        <a class="btn btn-primary" style="color: white;padding-top: 8px">当前页：产品设置</a>
     </div>
+</div>
+
+<input type="file" id="file" hidden="hidden">
+
+<div id="upd_1" class="alert alert-success alert-dismissible" hidden="hidden" style="float:right;margin-bottom: 0;margin-top: 20px;margin-right: 10px;">
+    <strong>保存成功!</strong>
+</div>
+<div id="upd_2" class="alert alert-danger alert-dismissible"  hidden="hidden" style="float:right;margin-bottom: 0;margin-top: 20px;margin-right: 10px;">
+    <strong>保存失败!</strong>
 </div>
 
 <div class="table-div border-top">
@@ -197,6 +202,19 @@
                     <i class="bi bi-x-circle icon"></i>
                     取消
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop='static'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">提示</h4>
+            </div>
+            <div class="modal-body">
+                文件生成中，请稍候。<span id="result"></span>
             </div>
         </div>
     </div>

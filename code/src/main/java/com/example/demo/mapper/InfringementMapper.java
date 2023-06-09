@@ -21,7 +21,7 @@ public interface InfringementMapper extends BaseMapper<Infringement> {
     @Insert("insert into infringement(text,replace_text) values(#{text},#{replaceText})")
     boolean insert(String text,String replaceText);
 
-    @Select("select * from infringement where product like '%'+#{this_column}+'%'")
+    @Select("select * from infringement where text like '%'+#{this_column}+'%'")
     List<Infringement> queryList(String this_column);
 
     @Update("update infringement set text = #{text},replace_text = #{replaceText} where id= #{id}")

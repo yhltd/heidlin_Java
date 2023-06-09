@@ -99,39 +99,33 @@ public class TextRestrictionsController {
      * 添加
      */
     @RequestMapping("/add")
-    public ResultInfo add(@RequestBody HashMap map, HttpSession session) {
+    public ResultInfo add( HttpSession session) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
-        GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
         try {
-            TextRestrictions textRestrictions = GsonUtil.toEntity(gsonUtil.get("addInfo"), TextRestrictions.class);
+            TextRestrictions textRestrictions = new TextRestrictions();
             if(userInfo.getPower().equals("管理员")){
                 textRestrictions.setFounder("管理员");
             }else{
                 textRestrictions.setFounder(userInfo.getId().toString());
             }
-            List<TextRestrictions> nameList = textRestrictionsService.getName(textRestrictions.getFounder(),textRestrictions.getProduct());
-            if(nameList.size() == 0){
-                textRestrictionsService.insert(textRestrictions);
-                if(userInfo.getPower().equals("管理员")){
-                    List<TextRestrictions> idList = textRestrictionsService.getMaxId();
-                    List<UserInfo> userList =  userInfoService.getUserList();
-                    if(userList.size() > 0){
-                        for(int i=0; i<userList.size(); i++){
-                            textRestrictions.setFounder(userList.get(i).getId().toString());
-                            textRestrictions.setTextId(idList.get(0).getId());
-                            textRestrictionsService.insertById(textRestrictions);
-                        }
+
+            textRestrictionsService.insert(textRestrictions);
+            if(userInfo.getPower().equals("管理员")){
+                List<TextRestrictions> idList = textRestrictionsService.getMaxId();
+                List<UserInfo> userList =  userInfoService.getUserList();
+                if(userList.size() > 0){
+                    for(int i=0; i<userList.size(); i++){
+                        textRestrictions.setFounder(userList.get(i).getId().toString());
+                        textRestrictions.setTextId(idList.get(0).getId());
+                        textRestrictionsService.insertById(textRestrictions);
                     }
                 }
-                return ResultInfo.success("添加成功");
-            }else{
-                return ResultInfo.error("已有相同产品名称的配置，请检查");
             }
+            return ResultInfo.success("添加成功");
 
         } catch (Exception e) {
             e.printStackTrace();
             log.error("添加失败：{}", e.getMessage());
-            log.error("参数：{}", map);
             return ResultInfo.error("添加失败");
         }
     }
@@ -140,18 +134,16 @@ public class TextRestrictionsController {
      * 修改
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultInfo update(@RequestBody String updateJson,HttpSession session) {
+    public ResultInfo update(HttpSession session,String column,int id,String value) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
-        TextRestrictions textRestrictions = null;
         try {
-            textRestrictions = DecodeUtil.decodeToJson(updateJson, TextRestrictions.class);
             if(userInfo.getPower().equals("管理员")){
-                textRestrictionsService.update(textRestrictions.getColumntext(),textRestrictions.getNum(),textRestrictions.getId(),textRestrictions.getProduct());
-                textRestrictionsService.updateById(textRestrictions.getColumntext(),textRestrictions.getNum(),textRestrictions.getId(),textRestrictions.getProduct());
+                textRestrictionsService.update(column,value,id);
+                textRestrictionsService.updateById(column,value,id);
             }else{
-                textRestrictionsService.update(textRestrictions.getColumntext(),textRestrictions.getNum(),textRestrictions.getId(),textRestrictions.getProduct());
+                textRestrictionsService.update(column,value,id);
             }
-            return ResultInfo.success("修改成功", textRestrictions);
+            return ResultInfo.success("修改成功",column);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("修改失败：{}", e.getMessage());

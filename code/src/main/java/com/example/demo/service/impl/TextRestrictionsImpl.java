@@ -24,6 +24,16 @@ public class TextRestrictionsImpl extends ServiceImpl<TextRestrictionsMapper, Te
     }
 
     @Override
+    public List<TextRestrictions> getListById(int id) {
+        return textRestrictionsMapper.getListById(id);
+    }
+
+    @Override
+    public List<TextRestrictions> getMuBan(int id) {
+        return textRestrictionsMapper.getMuBan(id);
+    }
+
+    @Override
     public List<TextRestrictions> getListByUser(String founder) {
         return textRestrictionsMapper.getListByUser(founder);
     }
@@ -55,22 +65,32 @@ public class TextRestrictionsImpl extends ServiceImpl<TextRestrictionsMapper, Te
 
     @Override
     public boolean insert(TextRestrictions textRestrictions) {
-        return textRestrictionsMapper.insert(textRestrictions.getColumntext(),textRestrictions.getNum(),textRestrictions.getFounder(),textRestrictions.getProduct());
+        return textRestrictionsMapper.insert(textRestrictions.getFounder());
     }
 
     @Override
     public boolean insertById(TextRestrictions textRestrictions) {
-        return textRestrictionsMapper.insertById(textRestrictions.getColumntext(),textRestrictions.getNum(),textRestrictions.getFounder(),textRestrictions.getTextId(),textRestrictions.getProduct());
+        return textRestrictionsMapper.insertById(textRestrictions.getFounder(),textRestrictions.getTextId());
     }
 
     @Override
-    public boolean update(String columntext,String num,int id,String product) {
-        return textRestrictionsMapper.update(columntext,num,id,product);
+    public boolean update(String column,String value,int id) {
+        return textRestrictionsMapper.update(column,value,id);
     }
 
     @Override
-    public boolean updateById(String columntext,String num,int id,String product) {
-        return textRestrictionsMapper.updateById(columntext,num,id,product);
+    public boolean updateMuBan(TextRestrictions textRestrictions) {
+        return textRestrictionsMapper.updateMuBan(textRestrictions.getKeyword(),textRestrictions.getLongword(),textRestrictions.getScenario(),textRestrictions.getUser(),textRestrictions.getProp1(),textRestrictions.getProp2(),textRestrictions.getProp3(),textRestrictions.getProp4(),textRestrictions.getProp5(),textRestrictions.getLuckword(),textRestrictions.getPoint1(),textRestrictions.getPoint2(),textRestrictions.getPoint3(),textRestrictions.getPoint4(),textRestrictions.getPoint5(),textRestrictions.getDescription(),textRestrictions.getProp6(),textRestrictions.getProp7(),textRestrictions.getProp8(),textRestrictions.getProp9(),textRestrictions.getProp10(),textRestrictions.getProp11(),textRestrictions.getProp12(),textRestrictions.getProp13(),textRestrictions.getProp14(),textRestrictions.getProp15(),textRestrictions.getProp16(),textRestrictions.getProp17(),textRestrictions.getProp18(),textRestrictions.getProp19(),textRestrictions.getProp20(),textRestrictions.getId(),textRestrictions.getProduct(),textRestrictions.getTitle(),textRestrictions.getTitleColor());
+    }
+
+    @Override
+    public boolean updateMuBanById(TextRestrictions textRestrictions) {
+        return textRestrictionsMapper.updateMuBanById(textRestrictions.getKeyword(),textRestrictions.getLongword(),textRestrictions.getScenario(),textRestrictions.getUser(),textRestrictions.getProp1(),textRestrictions.getProp2(),textRestrictions.getProp3(),textRestrictions.getProp4(),textRestrictions.getProp5(),textRestrictions.getLuckword(),textRestrictions.getPoint1(),textRestrictions.getPoint2(),textRestrictions.getPoint3(),textRestrictions.getPoint4(),textRestrictions.getPoint5(),textRestrictions.getDescription(),textRestrictions.getProp6(),textRestrictions.getProp7(),textRestrictions.getProp8(),textRestrictions.getProp9(),textRestrictions.getProp10(),textRestrictions.getProp11(),textRestrictions.getProp12(),textRestrictions.getProp13(),textRestrictions.getProp14(),textRestrictions.getProp15(),textRestrictions.getProp16(),textRestrictions.getProp17(),textRestrictions.getProp18(),textRestrictions.getProp19(),textRestrictions.getProp20(),textRestrictions.getId(),textRestrictions.getProduct(),textRestrictions.getTitle(),textRestrictions.getTitleColor());
+    }
+
+    @Override
+    public boolean updateById(String column,String value,int textId) {
+        return textRestrictionsMapper.updateById(column,value,textId);
     }
 
     @Override

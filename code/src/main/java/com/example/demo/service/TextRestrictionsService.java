@@ -23,6 +23,16 @@ public interface TextRestrictionsService extends IService<TextRestrictions> {
     /**
      * 查询所有
      */
+    List<TextRestrictions> getListById(int id);
+
+    /**
+     * 查询模板
+     */
+    List<TextRestrictions> getMuBan(int id);
+
+    /**
+     * 查询所有
+     */
     List<TextRestrictions> getListByUser(String founder);
 
     /**
@@ -63,12 +73,23 @@ public interface TextRestrictionsService extends IService<TextRestrictions> {
     /**
      * 修改
      */
-    boolean update(String columntext,String num,int id,String product);
+    boolean update(String column,String value,int id);
 
     /**
      * 修改
      */
-    boolean updateById(String columntext,String num,int id,String product);
+    boolean updateMuBan(TextRestrictions textRestrictions);
+
+
+    /**
+     * 修改
+     */
+    boolean updateMuBanById(TextRestrictions textRestrictions);
+
+    /**
+     * 修改
+     */
+    boolean updateById(String column,String value,int textId);
 
     /**
      * 删除
