@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author hui
@@ -137,6 +140,8 @@ public class RandomTextController {
 
             textRestrictionsList = textRestrictionsService.getListById(mubanId);
             randomTextList = textRestrictionsList;
+
+            Pattern compile = Pattern.compile(".*[[ _`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]|\\n|\\r|\\t].*");
 
             Map<Integer, Integer> textNumMap=new HashMap<>();
             for(int i=0; i<textRestrictionsList.size(); i++){
@@ -690,6 +695,39 @@ public class RandomTextController {
             //获取基本信息工作表
             Sheet sheet = wb.getSheet("Template");
             int lastColumn = sheet.getRow(1).getLastCellNum();
+
+            String[] replaceArr1 = keywordStr.split("``");
+            String[] replaceArr2 = longwordStr.split("``");
+            String[] replaceArr3 = scenarioStr.split("``");
+            String[] replaceArr4 = userStr.split("``");
+            String[] replaceArr5 = prop1Str.split("``");
+            String[] replaceArr6 = prop2Str.split("``");
+            String[] replaceArr7 = prop3Str.split("``");
+            String[] replaceArr8 = prop4Str.split("``");
+            String[] replaceArr9 = prop5Str.split("``");
+            String[] replaceArr10 = luckwordStr.split("``");
+            String[] replaceArr11 = point1Str.split("``");
+            String[] replaceArr12 = point2Str.split("``");
+            String[] replaceArr13 = point3Str.split("``");
+            String[] replaceArr14 = point4Str.split("``");
+            String[] replaceArr15 = point5Str.split("``");
+            String[] replaceArr16 = descriptionStr.split("``");
+            String[] replaceArr17 = prop6Str.split("``");
+            String[] replaceArr18 = prop7Str.split("``");
+            String[] replaceArr19 = prop8Str.split("``");
+            String[] replaceArr20 = prop9Str.split("``");
+            String[] replaceArr21 = prop10Str.split("``");
+            String[] replaceArr22 = prop11Str.split("``");
+            String[] replaceArr23 = prop12Str.split("``");
+            String[] replaceArr24 = prop13Str.split("``");
+            String[] replaceArr25 = prop14Str.split("``");
+            String[] replaceArr26 = prop15Str.split("``");
+            String[] replaceArr27 = prop16Str.split("``");
+            String[] replaceArr28 = prop17Str.split("``");
+            String[] replaceArr29 = prop18Str.split("``");
+            String[] replaceArr30 = prop19Str.split("``");
+            String[] replaceArr31 = prop20Str.split("``");
+
             for (int i = 3; i <= sheet.getLastRowNum(); i++) {
                 //获取第i行
                 Row row = sheet.getRow(i);
@@ -699,815 +737,647 @@ public class RandomTextController {
                     if(cell == null){
                         continue;
                     }
-                    String str = cell.getStringCellValue();
+
+                    String str = "";
+                    if(cell.getCellType() == 0){
+                        str = String.valueOf(cell.getNumericCellValue());
+                    }else if(cell.getCellType() == 5){
+                        str = "";
+                    }else{
+                        str = cell.getStringCellValue();
+                    }
+
                     str = str.replace("｛","{");
                     str = str.replace("｝","}");
-                    if(str.indexOf("{keyword}") != -1) {
-                        if(!keywordStr.equals("")){
-                            String[] replaceArr = keywordStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{keyword}",replaceArr[randomNum]);
-                        }
-                    }
 
-                    if(str.indexOf("{longword}") != -1) {
-                        if(!longwordStr.equals("")){
-                            String[] replaceArr = longwordStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{longword}",replaceArr[randomNum]);
+                    while(str.indexOf("{keyword}") != -1 && !keywordStr.equals("")){
+                        int maxNum = replaceArr1.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
-                    }
-
-                    if(str.indexOf("{scenario}") != -1) {
-                        if(!scenarioStr.equals("")){
-                            String[] replaceArr = scenarioStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{scenario}",replaceArr[randomNum]);
-                        }
+                        str = str.replaceFirst("\\{keyword\\}",replaceArr1[randomNum]);
                     }
 
 
 
-                    if(str.indexOf("{user}") != -1) {
-                        if(!userStr.equals("")){
-                            String[] replaceArr = userStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{user}",replaceArr[randomNum]);
+                    while(str.indexOf("{longword}") != -1 && !longwordStr.equals("")) {
+
+                        int maxNum = replaceArr2.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{longword\\}",replaceArr2[randomNum]);
                     }
 
-                    if(str.indexOf("{prop1}") != -1) {
-                        if(!prop1Str.equals("")){
-                            String[] replaceArr = prop1Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop1}",replaceArr[randomNum]);
+                    while(str.indexOf("{scenario}") != -1 && !scenarioStr.equals("")) {
+                        int maxNum = replaceArr3.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{scenario\\}",replaceArr3[randomNum]);
                     }
 
-                    if(str.indexOf("{prop2}") != -1) {
-                        if(!prop2Str.equals("")){
-                            String[] replaceArr = prop2Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop2}",replaceArr[randomNum]);
+
+
+                    while(str.indexOf("{user}") != -1 && !userStr.equals("")) {
+                        int maxNum = replaceArr4.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{user\\}",replaceArr4[randomNum]);
                     }
 
-                    if(str.indexOf("{prop3}") != -1) {
-                        if(!prop3Str.equals("")){
-                            String[] replaceArr = prop3Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop3}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop1}") != -1 && !prop1Str.equals("")) {
+                        int maxNum = replaceArr5.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop1\\}",replaceArr5[randomNum]);
                     }
 
-                    if(str.indexOf("{prop4}") != -1) {
-                        if(!prop4Str.equals("")){
-                            String[] replaceArr = prop4Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop4}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop2}") != -1 && !prop2Str.equals("")) {
+                        int maxNum = replaceArr6.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop2\\}",replaceArr6[randomNum]);
                     }
 
-                    if(str.indexOf("{prop5}") != -1) {
-                        if(!prop5Str.equals("")){
-                            String[] replaceArr = prop5Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop5}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop3}") != -1 && !prop3Str.equals("")) {
+                        int maxNum = replaceArr7.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop3\\}",replaceArr7[randomNum]);
                     }
 
-                    if(str.indexOf("{luckyword}") != -1) {
-                        if(!luckwordStr.equals("")){
-                            String[] replaceArr = luckwordStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{luckyword}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop4}") != -1 && !prop4Str.equals("")) {
+                        int maxNum = replaceArr8.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop4\\}",replaceArr8[randomNum]);
                     }
 
-                    if(str.indexOf("{point1}") != -1) {
-                        if(!point1Str.equals("")){
-                            String[] replaceArr = point1Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point1}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop5}") != -1 && !prop5Str.equals("")) {
+                        int maxNum = replaceArr9.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop5\\}",replaceArr9[randomNum]);
                     }
 
-                    if(str.indexOf("{point2}") != -1) {
-                        if(!point2Str.equals("")){
-                            String[] replaceArr = point2Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point2}",replaceArr[randomNum]);
+                    while(str.indexOf("{luckyword}") != -1 && !luckwordStr.equals("")) {
+                        int maxNum = replaceArr10.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{luckyword\\}",replaceArr10[randomNum]);
                     }
 
-                    if(str.indexOf("{point3}") != -1) {
-                        if(!point3Str.equals("")){
-                            String[] replaceArr = point3Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point3}",replaceArr[randomNum]);
+                    while(str.indexOf("{point1}") != -1 && !point1Str.equals("")) {
+                        int maxNum = replaceArr11.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point1\\}",replaceArr11[randomNum]);
                     }
 
-                    if(str.indexOf("{point4}") != -1) {
-                        if(!point4Str.equals("")){
-                            String[] replaceArr = point4Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point4}",replaceArr[randomNum]);
+                    while(str.indexOf("{point2}") != -1 && !point2Str.equals("")) {
+                        int maxNum = replaceArr12.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point2\\}",replaceArr12[randomNum]);
                     }
 
-                    if(str.indexOf("{point5}") != -1) {
-                        if(!point5Str.equals("")){
-                            String[] replaceArr = point5Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point5}",replaceArr[randomNum]);
+                    while(str.indexOf("{point3}") != -1) {
+                        int maxNum = replaceArr13.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point3\\}",replaceArr13[randomNum]);
                     }
 
-                    if(str.indexOf("{description}") != -1) {
-                        if(!descriptionStr.equals("")){
-                            String[] replaceArr = descriptionStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{description}",replaceArr[randomNum]);
+                    while(str.indexOf("{point4}") != -1 && !point4Str.equals("")) {
+                        int maxNum = replaceArr14.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point4\\}",replaceArr14[randomNum]);
                     }
 
-                    if(str.indexOf("{prop6}") != -1) {
-                        if(!prop6Str.equals("")){
-                            String[] replaceArr = prop6Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop6}",replaceArr[randomNum]);
+                    while(str.indexOf("{point5}") != -1 && !point5Str.equals("")) {
+                        int maxNum = replaceArr15.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point5\\}",replaceArr15[randomNum]);
                     }
 
-                    if(str.indexOf("{prop7}") != -1) {
-                        if(!prop7Str.equals("")){
-                            String[] replaceArr = prop7Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop7}",replaceArr[randomNum]);
+                    while(str.indexOf("{description}") != -1 && !descriptionStr.equals("")) {
+                        int maxNum = replaceArr16.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{description\\}",replaceArr16[randomNum]);
                     }
 
-                    if(str.indexOf("{prop8}") != -1) {
-                        if(!prop8Str.equals("")){
-                            String[] replaceArr = prop8Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop8}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop6}") != -1 && !prop6Str.equals("")) {
+                        int maxNum = replaceArr17.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop6\\}",replaceArr17[randomNum]);
                     }
 
-                    if(str.indexOf("{prop9}") != -1) {
-                        if(!prop9Str.equals("")){
-                            String[] replaceArr = prop9Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop9}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop7}") != -1 && !prop7Str.equals("")) {
+                        int maxNum = replaceArr18.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop7\\}",replaceArr18[randomNum]);
                     }
 
-                    if(str.indexOf("{prop10}") != -1) {
-                        if(!prop10Str.equals("")){
-                            String[] replaceArr = prop10Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop10}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop8}") != -1 && !prop8Str.equals("")) {
+                        int maxNum = replaceArr19.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop8\\}",replaceArr19[randomNum]);
                     }
 
-                    if(str.indexOf("{prop11}") != -1) {
-                        if(!prop11Str.equals("")){
-                            String[] replaceArr = prop11Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop11}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop9}") != -1 && !prop9Str.equals("")) {
+                        int maxNum = replaceArr20.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop9\\}",replaceArr20[randomNum]);
                     }
 
-                    if(str.indexOf("{prop12}") != -1) {
-                        if(!prop12Str.equals("")){
-                            String[] replaceArr = prop12Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop12}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop10}") != -1 && !prop10Str.equals("")) {
+                        int maxNum = replaceArr21.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop10\\}",replaceArr21[randomNum]);
                     }
 
-                    if(str.indexOf("{prop13}") != -1) {
-                        if(!prop13Str.equals("")){
-                            String[] replaceArr = prop13Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop13}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop11}") != -1 && !prop11Str.equals("")) {
+                        int maxNum = replaceArr22.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop11\\}",replaceArr22[randomNum]);
                     }
 
-                    if(str.indexOf("{prop14}") != -1) {
-                        if(!prop14Str.equals("")){
-                            String[] replaceArr = prop14Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop14}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop12}") != -1 && !prop12Str.equals("")) {
+                        int maxNum = replaceArr23.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop12\\}",replaceArr23[randomNum]);
                     }
 
-                    if(str.indexOf("{prop15}") != -1) {
-                        if(!prop15Str.equals("")){
-                            String[] replaceArr = prop15Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop15}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop13}") != -1 && !prop13Str.equals("")) {
+                        int maxNum = replaceArr24.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop13\\}",replaceArr24[randomNum]);
                     }
 
-                    if(str.indexOf("{prop16}") != -1) {
-                        if(!prop16Str.equals("")){
-                            String[] replaceArr = prop16Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop16}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop14}") != -1 && !prop14Str.equals("")) {
+                        int maxNum = replaceArr25.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop14\\}",replaceArr25[randomNum]);
                     }
 
-                    if(str.indexOf("{prop17}") != -1) {
-                        if(!prop17Str.equals("")){
-                            String[] replaceArr = prop17Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop17}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop15}") != -1 && !prop15Str.equals("")) {
+                        int maxNum = replaceArr26.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop15\\}",replaceArr26[randomNum]);
                     }
 
-                    if(str.indexOf("{prop18}") != -1) {
-                        if(!prop18Str.equals("")){
-                            String[] replaceArr = prop18Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop18}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop16}") != -1 && !prop16Str.equals("")) {
+                        int maxNum = replaceArr27.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop16\\}",replaceArr27[randomNum]);
                     }
 
-                    if(str.indexOf("{prop19}") != -1) {
-                        if(!prop19Str.equals("")){
-                            String[] replaceArr = prop19Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop19}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop17}") != -1 && !prop17Str.equals("")) {
+                        int maxNum = replaceArr28.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop17\\}",replaceArr28[randomNum]);
                     }
 
-                    if(str.indexOf("{prop20}") != -1) {
-                        if(!prop20Str.equals("")){
-                            String[] replaceArr = prop20Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop20}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop18}") != -1 && !prop18Str.equals("")) {
+                        int maxNum = replaceArr29.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop18\\}",replaceArr29[randomNum]);
                     }
 
-                    if(str.indexOf("{keyword}") != -1) {
-                        if(!keywordStr.equals("")){
-                            String[] replaceArr = keywordStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{keyword}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop19}") != -1 && !prop19Str.equals("")) {
+                        int maxNum = replaceArr30.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop19\\}",replaceArr30[randomNum]);
                     }
 
-                    if(str.indexOf("{longword}") != -1) {
-                        if(!longwordStr.equals("")){
-                            String[] replaceArr = longwordStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{longword}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop20}") != -1 && !prop20Str.equals("")) {
+                        int maxNum = replaceArr31.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop20\\}",replaceArr31[randomNum]);
                     }
 
-                    if(str.indexOf("{scenario}") != -1) {
-                        if(!scenarioStr.equals("")){
-                            String[] replaceArr = scenarioStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{scenario}",replaceArr[randomNum]);
+                    while(str.indexOf("{keyword}") != -1 && !keywordStr.equals("")){
+                        int maxNum = replaceArr1.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{keyword\\}",replaceArr1[randomNum]);
                     }
 
-                    if(str.indexOf("{user}") != -1) {
-                        if(!userStr.equals("")){
-                            String[] replaceArr = userStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{user}",replaceArr[randomNum]);
+
+
+                    while(str.indexOf("{longword}") != -1 && !longwordStr.equals("")) {
+
+                        int maxNum = replaceArr2.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{longword\\}",replaceArr2[randomNum]);
                     }
 
-                    if(str.indexOf("{prop1}") != -1) {
-                        if(!prop1Str.equals("")){
-                            String[] replaceArr = prop1Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop1}",replaceArr[randomNum]);
+                    while(str.indexOf("{scenario}") != -1 && !scenarioStr.equals("")) {
+                        int maxNum = replaceArr3.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{scenario\\}",replaceArr3[randomNum]);
                     }
 
-                    if(str.indexOf("{prop2}") != -1) {
-                        if(!prop2Str.equals("")){
-                            String[] replaceArr = prop2Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop2}",replaceArr[randomNum]);
+
+
+                    while(str.indexOf("{user}") != -1 && !userStr.equals("")) {
+                        int maxNum = replaceArr4.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{user\\}",replaceArr4[randomNum]);
                     }
 
-                    if(str.indexOf("{prop3}") != -1) {
-                        if(!prop3Str.equals("")){
-                            String[] replaceArr = prop3Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop3}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop1}") != -1 && !prop1Str.equals("")) {
+                        int maxNum = replaceArr5.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop1\\}",replaceArr5[randomNum]);
                     }
 
-                    if(str.indexOf("{prop4}") != -1) {
-                        if(!prop4Str.equals("")){
-                            String[] replaceArr = prop4Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop4}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop2}") != -1 && !prop2Str.equals("")) {
+                        int maxNum = replaceArr6.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop2\\}",replaceArr6[randomNum]);
                     }
 
-                    if(str.indexOf("{prop5}") != -1) {
-                        if(!prop5Str.equals("")){
-                            String[] replaceArr = prop5Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop5}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop3}") != -1 && !prop3Str.equals("")) {
+                        int maxNum = replaceArr7.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop3\\}",replaceArr7[randomNum]);
                     }
 
-                    if(str.indexOf("{luckword}") != -1) {
-                        if(!luckwordStr.equals("")){
-                            String[] replaceArr = luckwordStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{luckword}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop4}") != -1 && !prop4Str.equals("")) {
+                        int maxNum = replaceArr8.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop4\\}",replaceArr8[randomNum]);
                     }
 
-                    if(str.indexOf("{point1}") != -1) {
-                        if(!point1Str.equals("")){
-                            String[] replaceArr = point1Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point1}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop5}") != -1 && !prop5Str.equals("")) {
+                        int maxNum = replaceArr9.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop5\\}",replaceArr9[randomNum]);
                     }
 
-                    if(str.indexOf("{point2}") != -1) {
-                        if(!point2Str.equals("")){
-                            String[] replaceArr = point2Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point2}",replaceArr[randomNum]);
+                    while(str.indexOf("{luckyword}") != -1 && !luckwordStr.equals("")) {
+                        int maxNum = replaceArr10.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{luckyword\\}",replaceArr10[randomNum]);
                     }
 
-                    if(str.indexOf("{point3}") != -1) {
-                        if(!point3Str.equals("")){
-                            String[] replaceArr = point3Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point3}",replaceArr[randomNum]);
+                    while(str.indexOf("{point1}") != -1 && !point1Str.equals("")) {
+                        int maxNum = replaceArr11.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point1\\}",replaceArr11[randomNum]);
                     }
 
-                    if(str.indexOf("{point4}") != -1) {
-                        if(!point4Str.equals("")){
-                            String[] replaceArr = point4Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point4}",replaceArr[randomNum]);
+                    while(str.indexOf("{point2}") != -1 && !point2Str.equals("")) {
+                        int maxNum = replaceArr12.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point2\\}",replaceArr12[randomNum]);
                     }
 
-                    if(str.indexOf("{point5}") != -1) {
-                        if(!point5Str.equals("")){
-                            String[] replaceArr = point5Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{point5}",replaceArr[randomNum]);
+                    while(str.indexOf("{point3}") != -1) {
+                        int maxNum = replaceArr13.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point3\\}",replaceArr13[randomNum]);
                     }
 
-                    if(str.indexOf("{description}") != -1) {
-                        if(!descriptionStr.equals("")){
-                            String[] replaceArr = descriptionStr.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{description}",replaceArr[randomNum]);
+                    while(str.indexOf("{point4}") != -1 && !point4Str.equals("")) {
+                        int maxNum = replaceArr14.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point4\\}",replaceArr14[randomNum]);
                     }
 
-                    if(str.indexOf("{prop6}") != -1) {
-                        if(!prop6Str.equals("")){
-                            String[] replaceArr = prop6Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop6}",replaceArr[randomNum]);
+                    while(str.indexOf("{point5}") != -1 && !point5Str.equals("")) {
+                        int maxNum = replaceArr15.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{point5\\}",replaceArr15[randomNum]);
                     }
 
-                    if(str.indexOf("{prop7}") != -1) {
-                        if(!prop7Str.equals("")){
-                            String[] replaceArr = prop7Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop7}",replaceArr[randomNum]);
+                    while(str.indexOf("{description}") != -1 && !descriptionStr.equals("")) {
+                        int maxNum = replaceArr16.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{description\\}",replaceArr16[randomNum]);
                     }
 
-                    if(str.indexOf("{prop8}") != -1) {
-                        if(!prop8Str.equals("")){
-                            String[] replaceArr = prop8Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop8}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop6}") != -1 && !prop6Str.equals("")) {
+                        int maxNum = replaceArr17.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop6\\}",replaceArr17[randomNum]);
                     }
 
-                    if(str.indexOf("{prop9}") != -1) {
-                        if(!prop9Str.equals("")){
-                            String[] replaceArr = prop9Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop9}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop7}") != -1 && !prop7Str.equals("")) {
+                        int maxNum = replaceArr18.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop7\\}",replaceArr18[randomNum]);
                     }
 
-                    if(str.indexOf("{prop10}") != -1) {
-                        if(!prop10Str.equals("")){
-                            String[] replaceArr = prop10Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop10}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop8}") != -1 && !prop8Str.equals("")) {
+                        int maxNum = replaceArr19.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop8\\}",replaceArr19[randomNum]);
                     }
 
-                    if(str.indexOf("{prop11}") != -1) {
-                        if(!prop11Str.equals("")){
-                            String[] replaceArr = prop11Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop11}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop9}") != -1 && !prop9Str.equals("")) {
+                        int maxNum = replaceArr20.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop9\\}",replaceArr20[randomNum]);
                     }
 
-                    if(str.indexOf("{prop12}") != -1) {
-                        if(!prop12Str.equals("")){
-                            String[] replaceArr = prop12Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop12}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop10}") != -1 && !prop10Str.equals("")) {
+                        int maxNum = replaceArr21.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop10\\}",replaceArr21[randomNum]);
                     }
 
-                    if(str.indexOf("{prop13}") != -1) {
-                        if(!prop13Str.equals("")){
-                            String[] replaceArr = prop13Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop13}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop11}") != -1 && !prop11Str.equals("")) {
+                        int maxNum = replaceArr22.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop11\\}",replaceArr22[randomNum]);
                     }
 
-                    if(str.indexOf("{prop14}") != -1) {
-                        if(!prop14Str.equals("")){
-                            String[] replaceArr = prop14Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop14}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop12}") != -1 && !prop12Str.equals("")) {
+                        int maxNum = replaceArr23.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop12\\}",replaceArr23[randomNum]);
                     }
 
-                    if(str.indexOf("{prop15}") != -1) {
-                        if(!prop15Str.equals("")){
-                            String[] replaceArr = prop15Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop15}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop13}") != -1 && !prop13Str.equals("")) {
+                        int maxNum = replaceArr24.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop13\\}",replaceArr24[randomNum]);
                     }
 
-                    if(str.indexOf("{prop16}") != -1) {
-                        if(!prop16Str.equals("")){
-                            String[] replaceArr = prop16Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop16}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop14}") != -1 && !prop14Str.equals("")) {
+                        int maxNum = replaceArr25.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop14\\}",replaceArr25[randomNum]);
                     }
 
-                    if(str.indexOf("{prop17}") != -1) {
-                        if(!prop17Str.equals("")){
-                            String[] replaceArr = prop17Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop17}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop15}") != -1 && !prop15Str.equals("")) {
+                        int maxNum = replaceArr26.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop15\\}",replaceArr26[randomNum]);
                     }
 
-                    if(str.indexOf("{prop18}") != -1) {
-                        if(!prop18Str.equals("")){
-                            String[] replaceArr = prop18Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop18}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop16}") != -1 && !prop16Str.equals("")) {
+                        int maxNum = replaceArr27.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop16\\}",replaceArr27[randomNum]);
                     }
 
-                    if(str.indexOf("{prop19}") != -1) {
-                        if(!prop19Str.equals("")){
-                            String[] replaceArr = prop19Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop19}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop17}") != -1 && !prop17Str.equals("")) {
+                        int maxNum = replaceArr28.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop17\\}",replaceArr28[randomNum]);
                     }
 
-                    if(str.indexOf("{prop20}") != -1) {
-                        if(!prop20Str.equals("")){
-                            String[] replaceArr = prop20Str.split("``");
-                            int maxNum = replaceArr.length;
-                            Random r = new Random();
-                            int randomNum = 0;
-                            if(maxNum > 0){
-                                randomNum = r.nextInt(maxNum);
-                            }
-                            str = str.replace("{prop20}",replaceArr[randomNum]);
+                    while(str.indexOf("{prop18}") != -1 && !prop18Str.equals("")) {
+                        int maxNum = replaceArr29.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
                         }
+                        str = str.replaceFirst("\\{prop18\\}",replaceArr29[randomNum]);
+                    }
+
+                    while(str.indexOf("{prop19}") != -1 && !prop19Str.equals("")) {
+                        int maxNum = replaceArr30.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
+                        }
+                        str = str.replaceFirst("\\{prop19\\}",replaceArr30[randomNum]);
+                    }
+
+                    while(str.indexOf("{prop20}") != -1 && !prop20Str.equals("")) {
+                        int maxNum = replaceArr31.length;
+                        Random r = new Random();
+                        int randomNum = 0;
+                        if(maxNum > 0){
+                            randomNum = r.nextInt(maxNum);
+                        }
+                        str = str.replaceFirst("\\{prop20\\}",replaceArr31[randomNum]);
                     }
 
                     if(textNumMap.containsKey(j + 1)){
@@ -1545,14 +1415,22 @@ public class RandomTextController {
                                 panduan = true;
                             }
                         }
+
+                        Matcher matcher = compile.matcher(key);
                         if(panduan){
-                            str = str.replaceAll("(?i)" + key,qinquanMap.get(key));
+                            if(matcher.matches()){
+                                str = str.replaceAll("(?i)" + key , qinquanMap.get(key) );
+                            }else{
+                                str = str.replaceAll("\\b(?i)" + key + "\\b", qinquanMap.get(key) );
+                            }
                         }
                     }
 
                     //修改列内容
                     sheet.getRow(i).getCell(j).setCellValue(str);
                 }
+
+                System.out.println(i + " - " + sheet.getLastRowNum());
             }
 
             File PDFFilePath = new File("codeExecl.xls");

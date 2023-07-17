@@ -134,16 +134,19 @@ $(function () {
 
                     }, false, '', function (res) {
                         console.log(res)
-                        var thisBase = res.data
-                        var nameArr = $('#file').val().split("\\")
-                        nameArr = nameArr[nameArr.length - 1]
-                        $('#file').val('');
-                        downloadFileByBase64(nameArr, thisBase)
-                        //隐藏
-                        $('#loading').modal('hide');
-                        swal(res.msg);
                         if (res.code == 200) {
+                            var thisBase = res.data
+                            var nameArr = $('#file').val().split("\\")
+                            nameArr = nameArr[nameArr.length - 1]
+                            $('#file').val('');
+                            downloadFileByBase64(nameArr, thisBase)
+                            //隐藏
+                            $('#loading').modal('hide');
+                            swal("", res.msg, "success");
                             getList();
+                        }else{
+                            $('#loading').modal('hide');
+                            swal("", res.msg, "error");
                         }
                     })
                 }

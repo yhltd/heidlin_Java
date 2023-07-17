@@ -134,17 +134,13 @@ public class UserInfoController {
             UserInfo userInfo2 = GsonUtil.toEntity(gsonUtil.get("addInfo"), UserInfo.class);
             userInfo2 = userInfoService.add(userInfo2);
             List<UserInfo> userInfoList = userInfoService.getListid();
-            List<RandomText> randomTextList = randomTextService.getList();
             List<TextRestrictions> textRestrictionsList = textRestrictionsService.getList();
-            for(int i=0;i<randomTextList.size(); i++){
-                randomTextList.get(i).setFounder(userInfoList.get(0).getId().toString());
-                randomTextList.get(i).setTextId(randomTextList.get(i).getId());
-                randomTextService.insertById(randomTextList.get(i));
-            }
             for(int i=0; i<textRestrictionsList.size(); i++){
-                textRestrictionsList.get(i).setFounder(userInfoList.get(0).getId().toString());
-                textRestrictionsList.get(i).setTextId(textRestrictionsList.get(i).getId());
-                textRestrictionsService.insertById(textRestrictionsList.get(i));
+                if(textRestrictionsList.get(i).getFounder().equals("管理员")){
+                    textRestrictionsList.get(i).setFounder(userInfoList.get(0).getId().toString());
+                    textRestrictionsList.get(i).setTextId(textRestrictionsList.get(i).getId());
+                    textRestrictionsService.insertById(textRestrictionsList.get(i));
+                }
             }
             return ResultInfo.success("添加成功");
         } catch (Exception e) {
