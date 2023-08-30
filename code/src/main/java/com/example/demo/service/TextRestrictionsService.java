@@ -71,6 +71,11 @@ public interface TextRestrictionsService extends IService<TextRestrictions> {
     boolean insertById(TextRestrictions textRestrictions);
 
     /**
+     * 添加
+     */
+    boolean insertById2(TextRestrictions textRestrictions);
+
+    /**
      * 修改
      */
     boolean update(String column,String value,int id);

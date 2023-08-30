@@ -74,6 +74,11 @@ public class TextRestrictionsImpl extends ServiceImpl<TextRestrictionsMapper, Te
     }
 
     @Override
+    public boolean insertById2(TextRestrictions textRestrictions) {
+        return textRestrictionsMapper.insertById2(textRestrictions.getFounder(),textRestrictions.getTextId());
+    }
+
+    @Override
     public boolean update(String column,String value,int id) {
         return textRestrictionsMapper.update(column,value,id);
     }

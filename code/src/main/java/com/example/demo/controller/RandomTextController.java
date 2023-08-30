@@ -1403,23 +1403,13 @@ public class RandomTextController {
                     for (String key : qinquanMap.keySet()) {
                         boolean panduan = false;
                         if(str.toUpperCase().indexOf(key.toUpperCase()) != -1){
-                            if(str.toUpperCase().indexOf(key.toUpperCase()) == 0){
-                                if(key.length() == str.length()){
-                                    panduan = true;
-                                }else if(str.toUpperCase().indexOf(key.toUpperCase() + " ") != -1){
-                                    panduan = true;
-                                }
-                            }else if( str.toUpperCase().indexOf(" " + key.toUpperCase() + " ") != -1 ){
-                                panduan = true;
-                            }else if( str.toUpperCase().indexOf(" " + key.toUpperCase()) + key.length() == str.length() ){
-                                panduan = true;
-                            }
+                            panduan = true;
                         }
 
                         Matcher matcher = compile.matcher(key);
                         if(panduan){
                             if(matcher.matches()){
-                                str = str.replaceAll("(?i)" + key , qinquanMap.get(key) );
+                                str = str.replaceAll("(?i)" + key.replace("{","\\{").replace("}","\\}") , qinquanMap.get(key) );
                             }else{
                                 str = str.replaceAll("\\b(?i)" + key + "\\b", qinquanMap.get(key) );
                             }

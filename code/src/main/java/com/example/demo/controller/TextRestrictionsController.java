@@ -117,7 +117,7 @@ public class TextRestrictionsController {
                     for(int i=0; i<userList.size(); i++){
                         textRestrictions.setFounder(userList.get(i).getId().toString());
                         textRestrictions.setTextId(idList.get(0).getId());
-                        textRestrictionsService.insertById(textRestrictions);
+                        textRestrictionsService.insertById2(textRestrictions);
                     }
                 }
             }
