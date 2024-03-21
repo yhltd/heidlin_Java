@@ -221,7 +221,14 @@ function setTable(data) {
                 align: 'center',
                 sortable: true,
                 width: 100,
-            }
+            },{
+                field: 'change',
+                title: '侵权词替换',
+                align: 'center',
+                sortable: true,
+                width: 100,
+            },
+
         ],
         onClickRow: function (row, el) {
             let isSelect = $(el).hasClass('selected')

@@ -73,9 +73,25 @@ public class UserInfoImpl extends ServiceImpl<UserInfoMapper, UserInfo> implemen
     }
 
     @Override
-    public boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_power) {
-        return userInfoMapper.useradd(add_username, add_password, add_name, add_department, add_power);
+    public UserInfo useradd(UserInfo userInfo) {
+        return null;
     }
+
+    //
+//    @Override
+//    public boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_power) {
+//        return false;
+//    }
+    @Override
+public boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_power, String add_change) {
+        return false;
+    }
+
+    @Override
+    public boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_change) {
+        return userInfoMapper.useradd(add_username, add_password, add_name, add_department, add_change);
+    }
+
 
     //    boolena useradd(String add_username, String add_password, String add_name, String add_department) {
 //        return userInfoMapper.useradd(add_username,add_password,add_name,add_department);

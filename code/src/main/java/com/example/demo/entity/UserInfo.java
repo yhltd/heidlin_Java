@@ -33,4 +33,6 @@ public class UserInfo {
      * 部门
      */
     private String department;
+
+    private String change;
 }

@@ -1,6 +1,10 @@
-
+// function pass(id) {
+//     $.session.set('id', id)
+//     document.location.href = 'randomText.html'
+// }
 
 function getList() {
+
     $('#this_column').val("");
     $ajax({
         type: 'post',

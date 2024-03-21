@@ -99,6 +99,8 @@ public class UserInfoController {
         }
     }
 
+
+
     /**
      * 根据姓名和部门查询
      *
@@ -155,10 +157,10 @@ public class UserInfoController {
      * 添加
      */
     @RequestMapping("/useradd")
-    public ResultInfo useradd( HttpSession session, String add_username, String add_password, String add_name, String add_department, String add_power) {
+    public ResultInfo useradd( HttpSession session, String add_username, String add_password, String add_name, String add_department, String add_power,String add_change) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
         try {
-            if(userInfoService.useradd(add_username,add_password,add_name,add_department,add_power)) {
+            if(userInfoService.useradd(add_username,add_password,add_name,add_department,add_power,add_change)) {
                 return ResultInfo.success("添加成功");
             }else{
                 return ResultInfo.error("添加失败");
@@ -177,6 +179,32 @@ public class UserInfoController {
     public ResultInfo update(@RequestBody String updateJson,HttpSession session) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
         if(!userInfo.getPower().equals("管理员")){
+            return ResultInfo.error(401, "无权限");
+        }
+        UserInfo userInfo2 = null;
+        try {
+            userInfo2 = DecodeUtil.decodeToJson(updateJson, UserInfo.class);
+            if (userInfoService.update(userInfo2)) {
+                return ResultInfo.success("修改成功", userInfo2);
+            } else {
+                return ResultInfo.success("修改失败", userInfo2);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("修改失败：{}", e.getMessage());
+            log.error("参数：{}", userInfo);
+            return ResultInfo.error("修改失败");
+        }
+    }
+
+
+
+
+
+    @RequestMapping(value = "/update2", method = RequestMethod.POST)
+    public ResultInfo update2(@RequestBody String updateJson,HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        if(!userInfo.getChange().equals("否")){
             return ResultInfo.error(401, "无权限");
         }
         UserInfo userInfo2 = null;

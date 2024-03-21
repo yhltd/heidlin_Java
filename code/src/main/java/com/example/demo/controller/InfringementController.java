@@ -42,6 +42,11 @@ public class InfringementController {
     @RequestMapping("/getList")
     public ResultInfo getList(HttpSession session) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        if(!userInfo.getPower().equals("管理员")){
+            if(!userInfo.getChange().equals("是")){
+                return ResultInfo.error(401, "无权限");
+            }
+        }
         try {
             List<Infringement> getList = infringementService.getList();
             return ResultInfo.success("获取成功", getList);

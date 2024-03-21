@@ -27,12 +27,16 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     @Select("select MAX(id) as id from userInfo")
     List<UserInfo> getListid();
 
-    @Insert("insert into userinfo(username,password,name,department,power) values(#{add_username},#{add_password},#{add_name},#{add_department},#{power})")
-    boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_power);
-
+//    @Insert("insert into userinfo(username,password,name,department,power) values(#{add_username},#{add_password},#{add_name},#{add_department},#{power})")
+//    boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_power);
+//
+    @Insert("insert into userinfo(username,password,name,department,power) values(#{add_username},#{add_password},#{add_name},#{add_department},#{power},#{add_change})")
+    boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_power, String add_change);
     @Select("select * from userInfo where name like '%'+#{name}+'%' and department like '%'+#{department}+'%' ")
     List<UserInfo> queryList(String name,String department);
 
     @Delete("delete from userInfo where id=#{id}")
     boolean deleteid(int id);
+
+    boolean useradd(String addUsername, String addPassword, String addName, String addDepartment, String addChange);
 }

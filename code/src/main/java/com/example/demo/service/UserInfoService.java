@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.demo.entity.UserInfo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,7 +51,10 @@ public interface UserInfoService extends IService<UserInfo> {
     /**
      * 添加
      */
-    boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_power);
+//    boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_power);
+    UserInfo useradd(UserInfo userInfo);
+
+    boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_change);
 
     /**
      * 修改
@@ -66,4 +70,6 @@ public interface UserInfoService extends IService<UserInfo> {
     boolean delete(List<Integer> idList);
 
     boolean deleteid(int id);
+
+    boolean useradd(@Param("addUsername") String addUsername, String addPassword, String addName, String addDepartment, String addPower, String addChange);
 }

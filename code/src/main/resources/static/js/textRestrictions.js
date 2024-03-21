@@ -7,7 +7,54 @@ function getList() {
         url: '/textRestrictions/getList',
     }, false, '', function (res) {
         if (res.code == 200) {
-            setTable(res.data);
+            setTable(res.data)
+
+
+            // //session.get
+            // var find = $.session.get('id')
+            // console.log(find)
+            //
+            //
+            // // var href=location.href
+            // // var page=$('.x-toolbar input').val();//获取工具栏页面输入框的值
+            //
+            //
+            // // var value = sessionStorage.getItem('id');
+            // // function find (value){
+            //
+            //     if (!find){
+            //         console.log(2222)
+            //         return false;
+            //     }else {
+            //         console.log(76666)
+            //         // window.location.href = href;
+            //         // document.location.href = 'randomText.html'
+            //         $('#bootStrapTableId').bootStrapTable('load').pageNumber;
+            //
+            //         //会自动触发刷新方法进行返回上一级，在首页中点击刷新也会返回上一级
+            //         // window.location.href = window.history.back(-1);
+            //         // window.history.back(-1);
+            //         // contentPane.gotoPage(parseInt(page));
+            //         console.log(111111)
+            //     }
+
+
+            //
+            // function out (find){
+            //     if (find) {
+            //         return;
+            //     }else (
+            //         getList()
+            //     )
+            //
+            // }
+
+            // if(find !=null){
+            //     return getList()
+            // }
+
+
+
             $("#userTable").colResizable({
                 liveDrag: true,
                 gripInnerHtml: "<div class='grip'></div>",
@@ -380,13 +427,27 @@ function setTable(data) {
                 $(el).addClass('selected')
             }
         }
+
     })
+    var aa = $.session.get('ee')
+    if(aa!=''){
+        $('#userTable').bootstrapTable('selectPage',aa * 1)
+        $.session.set('ee', '')
+
+    }else{
+        return false
+    }
+
 }
 
 
 function pass(id) {
     $.session.set('id', id)
+    console.log(pass)
     document.location.href = 'randomText.html'
+    var ee = $("#userTable").bootstrapTable("getOptions").pageNumber;
+    console.log(ee)
+    $.session.set('ee', ee)
 }
 
 
