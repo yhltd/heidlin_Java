@@ -9,7 +9,7 @@ function getList() {
     }, false, '', function (res) {
         if (res.code == 200) {
             setTable(res.data);
-            $("#userTable").colResizable({
+            $("#textSelectTable").colResizable({
                 liveDrag: true,
                 gripInnerHtml: "<div class='grip'></div>",
                 draggingClass: "dragging",
@@ -18,6 +18,24 @@ function getList() {
             for (i=0;i<=res.data.id;i++){
                 idd=i;
             }
+        }
+    })
+}
+
+function getListFounder() {
+    $ajax({
+        type: 'post',
+        url: '/textRestrictions/getListFounder',
+    }, false, '', function (res) {
+        if (res.code == 200) {
+            console.log(res.data)
+            setTextTable(res.data);
+            $("#userSelectTable").colResizable({
+                liveDrag: true,
+                gripInnerHtml: "<div class='grip'></div>",
+                draggingClass: "dragging",
+                resizeMode: 'fit'
+            });
         }
     })
 }
@@ -63,23 +81,76 @@ $(function () {
         if (checkForm('#add-form')) {
             $ajax({
                 type: 'post',
-                url: '/user/add',
-                data: JSON.stringify({
-                    addInfo: params,
-                }),
-                dataType: 'json',
-                contentType: 'application/json;charset=utf-8'
+                url: '/user/getPower',
             }, false, '', function (res) {
                 if (res.code == 200) {
-                    swal("", res.msg, "success");
-                    $('#add-form')[0].reset();
-                    getList();
-                    $('#add-close-btn').click();
-                } else {
-                    swal("", res.msg, "error");
+                    console.log(res.data)
+                    var this_power = res.data
+                    if(this_power == '管理员'){
+                        $('#add2-modal').modal('show');
+                        getListFounder();
+                    }else{
+                        $ajax({
+                            type: 'post',
+                            url: '/user/add',
+                            data: JSON.stringify({
+                                addInfo: params,
+                                textList:[],
+                            }),
+                            dataType: 'json',
+                            contentType: 'application/json;charset=utf-8'
+                        }, false, '', function (res) {
+                            if (res.code == 200) {
+                                swal("", res.msg, "success");
+                                $('#add-form')[0].reset();
+                                getList();
+                                $('#add-close-btn').click();
+                            } else {
+                                swal("", res.msg, "error");
+                            }
+                        })
+                    }
                 }
             })
         }
+    });
+
+    //新增弹窗里点击提交按钮
+    $("#add2-submit-btn").click(function () {
+        let rows = getTableSelection("#textSelectTable");
+        let params = formToJson("#add-form");
+        console.log(rows)
+        var textList = []
+        for(var i=0; i<rows.length; i++){
+            textList.push(rows[i].data)
+        }
+        console.log(textList)
+        let user = formToJson("#add-form");
+        var msg = confirm("确认要将当前选中的商品共享给新建的用户？");
+        if (msg) {
+            if (checkForm('#add-form')) {
+                $ajax({
+                    type: 'post',
+                    url: '/user/add',
+                    data: JSON.stringify({
+                        addInfo: params,
+                        textList: textList,
+                    }),
+                    dataType: 'json',
+                    contentType: 'application/json;charset=utf-8'
+                }, false, '', function (res) {
+                    if (res.code == 200) {
+                        swal("", res.msg, "success");
+                        $('#add2-modal').modal('hide');
+                        $('#add-modal').modal('hide');
+                        getList();
+                    } else {
+                        swal("", res.msg, "error");
+                    }
+                })
+            }
+        }
+
     });
 
     //点击修改按钮显示弹窗
@@ -237,6 +308,56 @@ function setTable(data) {
             } else {
                 $(el).addClass('selected')
             }
+        }
+    })
+}
+
+function setTextTable(data) {
+    if ($('#textSelectTable').html != '') {
+        $('#textSelectTable').bootstrapTable('load', data);
+    }
+
+    $('#textSelectTable').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 50,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'product',
+                title: '产品名称',
+                align: 'center',
+                sortable: true,
+                width: 150,
+            },
+
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+        rowStyle: function(row, index) {
+            // 根据需要为行添加不同的class
+            return {
+                classes: 'selected'
+            };
         }
     })
 }

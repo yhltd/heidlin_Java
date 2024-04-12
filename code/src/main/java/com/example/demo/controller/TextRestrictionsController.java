@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * @author hui
@@ -47,6 +46,54 @@ public class TextRestrictionsController {
                 List<TextRestrictions> getList = textRestrictionsService.getListByUser(userInfo.getId().toString());
                 return ResultInfo.success("获取成功", getList);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+    @RequestMapping("/getListFounder")
+    public ResultInfo getListFounder(HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        try {
+            List<TextRestrictions> getList = textRestrictionsService.getList();
+            return ResultInfo.success("获取成功", getList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+    /**
+     * 获取当前账号权限
+     *
+     * @return ResultInfo
+     */
+    @RequestMapping("/getPower")
+    public ResultInfo getPower(HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        try {
+            return ResultInfo.success("获取成功", userInfo.getPower());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+    /**
+     * 查询所有普通用户
+     *
+     * @return ResultInfo
+     */
+    @RequestMapping("/getUserList")
+    public ResultInfo getUserList(HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        try {
+            List<UserInfo> getList = userInfoService.getUserList();
+            return ResultInfo.success("获取成功", getList);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("获取失败：{}", e.getMessage());
@@ -99,9 +146,11 @@ public class TextRestrictionsController {
      * 添加
      */
     @RequestMapping("/add")
-    public ResultInfo add( HttpSession session) {
+    public ResultInfo add(@RequestBody HashMap map, HttpSession session ) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
         try {
+            List<UserInfo> userList = gsonUtil.toList(gsonUtil.get("addInfo"),UserInfo.class);
             TextRestrictions textRestrictions = new TextRestrictions();
             if(userInfo.getPower().equals("管理员")){
                 textRestrictions.setFounder("管理员");
@@ -112,7 +161,7 @@ public class TextRestrictionsController {
             textRestrictionsService.insert(textRestrictions);
             if(userInfo.getPower().equals("管理员")){
                 List<TextRestrictions> idList = textRestrictionsService.getMaxId();
-                List<UserInfo> userList =  userInfoService.getUserList();
+//                List<UserInfo> userList =  userInfoService.getUserList();
                 if(userList.size() > 0){
                     for(int i=0; i<userList.size(); i++){
                         textRestrictions.setFounder(userList.get(i).getId().toString());
@@ -120,6 +169,14 @@ public class TextRestrictionsController {
                         textRestrictionsService.insertById2(textRestrictions);
                     }
                 }
+
+//                ArrayList<UserInfo> arrayList = new ArrayList<>();
+//                for(field field : userInfo.getClass().getDeclaredFields());
+//                field.setAccessible(true);
+//                userInfo value = field.get
+
+
+
             }
             return ResultInfo.success("添加成功");
 

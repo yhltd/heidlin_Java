@@ -79,6 +79,41 @@ public class UserInfoController {
     }
 
     /**
+     * 获取当前账号权限
+     *
+     * @return ResultInfo
+     */
+    @RequestMapping("/getPower")
+    public ResultInfo getPower(HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        try {
+            return ResultInfo.success("获取成功", userInfo.getPower());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+    /**
+     * 查询所有普通用户
+     *
+     * @return ResultInfo
+     */
+    @RequestMapping("/getUserList")
+    public ResultInfo getUserList(HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        try {
+            List<UserInfo> getList = userInfoService.getUserList();
+            return ResultInfo.success("获取成功", getList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+    /**
      * 查询所有
      *
      * @return ResultInfo
@@ -136,7 +171,7 @@ public class UserInfoController {
             UserInfo userInfo2 = GsonUtil.toEntity(gsonUtil.get("addInfo"), UserInfo.class);
             userInfo2 = userInfoService.add(userInfo2);
             List<UserInfo> userInfoList = userInfoService.getListid();
-            List<TextRestrictions> textRestrictionsList = textRestrictionsService.getList();
+            List<TextRestrictions> textRestrictionsList = GsonUtil.toList(gsonUtil.get("textList"), TextRestrictions.class);
             for(int i=0; i<textRestrictionsList.size(); i++){
                 if(textRestrictionsList.get(i).getFounder().equals("管理员")){
                     textRestrictionsList.get(i).setFounder(userInfoList.get(0).getId().toString());

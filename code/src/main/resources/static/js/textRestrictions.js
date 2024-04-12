@@ -8,59 +8,25 @@ function getList() {
     }, false, '', function (res) {
         if (res.code == 200) {
             setTable(res.data)
-
-
-            // //session.get
-            // var find = $.session.get('id')
-            // console.log(find)
-            //
-            //
-            // // var href=location.href
-            // // var page=$('.x-toolbar input').val();//获取工具栏页面输入框的值
-            //
-            //
-            // // var value = sessionStorage.getItem('id');
-            // // function find (value){
-            //
-            //     if (!find){
-            //         console.log(2222)
-            //         return false;
-            //     }else {
-            //         console.log(76666)
-            //         // window.location.href = href;
-            //         // document.location.href = 'randomText.html'
-            //         $('#bootStrapTableId').bootStrapTable('load').pageNumber;
-            //
-            //         //会自动触发刷新方法进行返回上一级，在首页中点击刷新也会返回上一级
-            //         // window.location.href = window.history.back(-1);
-            //         // window.history.back(-1);
-            //         // contentPane.gotoPage(parseInt(page));
-            //         console.log(111111)
-            //     }
-
-
-            //
-            // function out (find){
-            //     if (find) {
-            //         return;
-            //     }else (
-            //         getList()
-            //     )
-            //
-            // }
-
-            // if(find !=null){
-            //     return getList()
-            // }
-
-
-
             $("#userTable").colResizable({
                 liveDrag: true,
                 gripInnerHtml: "<div class='grip'></div>",
                 draggingClass: "dragging",
                 resizeMode: 'fit'
             });
+        }
+    })
+}
+
+function getUserList() {
+    $('#this_column').val("");
+    $ajax({
+        type: 'post',
+        url: '/user/getUserList',
+    }, false, '', function (res) {
+        if (res.code == 200) {
+            console.log(res.data)
+            setUserTable(res.data)
         }
     })
 }
@@ -87,27 +53,113 @@ $(function () {
     $("#refresh-btn").click(function () {
         getList();
     });
+    // //点击新增按钮插一条空数据
+    // $("#add-btn").click(function () {
+    //     var params = [{
+    //         username:'admin',
+    //         password:'123123',
+    //         name:'管理员',
+    //         power:'管理员',
+    //         department:'',
+    //         change:'',
+    //     }]
+    //     $ajax({
+    //         type: 'post',
+    //         url: '/textRestrictions/add',
+    //         data: JSON.stringify({
+    //             addInfo: params,
+    //         }),
+    //         dataType: 'json',
+    //         contentType: 'application/json;charset=utf-8'
+    //     }, false, '', function (res) {
+    //         if (res.code == 200) {
+    //             swal("", res.msg, "success");
+    //             getList();
+    //         } else {
+    //             swal("", res.msg, "error");
+    //         }
+    //     })
+    // });
 
-    //点击新增按钮插一条空数据
+
+
+
+    //点击新增按钮显示弹窗
     $("#add-btn").click(function () {
-        var params = ""
         $ajax({
             type: 'post',
-            url: '/textRestrictions/add',
-            data: JSON.stringify({
-                addInfo: params,
-            }),
-            dataType: 'json',
-            contentType: 'application/json;charset=utf-8'
+            url: '/user/getPower',
         }, false, '', function (res) {
             if (res.code == 200) {
-                swal("", res.msg, "success");
-                getList();
-            } else {
-                swal("", res.msg, "error");
+                console.log(res.data)
+                var this_power = res.data
+                if(this_power == '管理员'){
+                    $('#add-modal').modal('show');
+                    getUserList();
+                }else{
+                    var params = []
+                    $ajax({
+                        type: 'post',
+                        url: '/textRestrictions/add',
+                        data: JSON.stringify({
+                            addInfo: params,
+                        }),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8'
+                    }, false, '', function (res) {
+                        if (res.code == 200) {
+                            swal("", res.msg, "success");
+                            $('#add-modal').modal('hide');
+                            getList();
+                        } else {
+                            swal("", res.msg, "error");
+                        }
+                    })
+                }
             }
         })
+
     });
+
+    //新增弹窗里点击关闭按钮
+    $('#add-close-btn').click(function () {
+        $('#add-modal').modal('hide');
+    });
+
+    //新增弹窗里点击提交按钮
+    $("#add-submit-btn").click(function () {
+        let rows = getTableSelection("#userSelectTable");
+        console.log(rows)
+        var params = []
+        for(var i=0; i<rows.length; i++){
+            params.push(rows[i].data)
+        }
+        console.log(params)
+        var msg = confirm("确认要将当前创建的商品共享给这些用户？");
+        if (msg) {
+            if (checkForm('#add-form')) {
+                $ajax({
+                    type: 'post',
+                    url: '/textRestrictions/add',
+                    data: JSON.stringify({
+                        addInfo: params,
+                    }),
+                    dataType: 'json',
+                    contentType: 'application/json;charset=utf-8'
+                }, false, '', function (res) {
+                    if (res.code == 200) {
+                        swal("", res.msg, "success");
+                        $('#add-modal').modal('hide');
+                        getList();
+                    } else {
+                        swal("", res.msg, "error");
+                    }
+                })
+            }
+        }
+
+    });
+
 
     //点击删除按钮
     $('#delete-btn').click(function () {
@@ -438,6 +490,69 @@ function setTable(data) {
         return false
     }
 
+}
+
+function setUserTable(data) {
+    if ($('#userSelectTable').html != '') {
+        $('#userSelectTable').bootstrapTable('load', data);
+    }
+
+    $('#userSelectTable').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        pagination: true,
+        pageSize: 15,//单页记录数
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 30,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'username',
+                title: '用户名',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },{
+                field: 'name',
+                title: '姓名',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            }, {
+                field: 'department',
+                title: '部门',
+                align: 'center',
+                sortable: true,
+                width: 100,
+            }
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+        rowStyle: function(row, index) {
+            // 根据需要为行添加不同的class
+            return {
+                classes: 'selected'
+            };
+        }
+    })
 }
 
 

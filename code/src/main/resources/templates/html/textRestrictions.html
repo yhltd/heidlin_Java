@@ -77,50 +77,52 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">录入</div>
+                <div class="modal-title">共享</div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="form-group">
-                <input id="add-founder" name="founder" type="hidden" data-required="1">
-            </div>
-            <div class="form-group">
-                <input id="add-textId" name="textId" type="hidden" data-required="1">
-            </div>
-            <div class="modal-body">
-                <form id="add-form" class="needs-validation">
-                    <div class="form-group">
-                        <label for="add-product">产品名称</label>
-                        <input id="add-product" name="product" type="text" class="form-control" autocomplete="off">
-                        <div class="invalid-feedback">
-                            请输入产品名称！
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="add-columntext">列标</label>
-                        <textarea id="add-columntext" rows="5" placeholder="请填写列标(一行一个，最多十个)" name="columntext" type="text" class="form-control" autocomplete="off"></textarea>
-                        <div class="invalid-feedback">
-                            请输入列标！
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="add-num">数量规定</label>
-                        <textarea id="add-num" rows="5" placeholder="请填写数量规定(一行一个，最多十个)" name="num" type="number" class="form-control" autocomplete="off"></textarea>
-                        <div class="invalid-feedback">
-                            请输入数量规定！
-                        </div>
-                    </div>
 
-                </form>
+            <div class="modal-body" style="max-height: 800px">
+                <table id="userSelectTable"></table>
             </div>
+
             <div class="border-top" style="padding: 15px;">
                 <button id="add-submit-btn" type="button" class="btn btn-primary">
                     <i class="bi bi-arrow-bar-up icon"></i>
 <!--                    <a href="randomText.html">提交</a>-->
                     提交
                 </button>
-                <button id="add-close-btn" type="button" class="btn btn-primary left-margin">
+            </div>
+        </div>
+    </div>
+</div>
+<div id="add1-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">编辑</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add1-form" class="needs-validation">
+                    <div class="form-group">
+                        <input id="idd2" name="id" type="hidden">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-username">用户名</label>
+                        <input id="update-username" name="username" type="text" class="form-control" autocomplete="off">
+                    </div>
+                </form>
+            </div>
+            <div class="border-top" style="padding: 15px;">
+                <button id="add1-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    提交
+                </button>
+                <button id="add1-close-btn" type="button" class="btn btn-primary left-margin">
                     <i class="bi bi-x-circle icon"></i>
                     关闭
                 </button>
