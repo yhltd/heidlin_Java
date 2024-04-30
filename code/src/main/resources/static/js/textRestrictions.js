@@ -31,6 +31,46 @@ function getUserList() {
     })
 }
 
+function getUserList1() {
+    $('#this_column').val("");
+    $ajax({
+        type: 'post',
+        url: '/user/getUserList',
+    }, false, '', function (res) {
+        if (res.code == 200) {
+            console.log(res.data)
+            setUserTable1(res.data)
+        }
+    })
+}
+
+function getListFounder1() {
+    let rows = getTableSelection("#userSelectTable1");
+    var params = []
+    for(var i=0; i<rows.length; i++){
+        params.push(rows[i].data)
+        var this_id = rows[i].data.id
+    }
+    $ajax({
+        type: 'post',
+        url: '/textRestrictions/getListByUser',
+        data:{
+            this_id: this_id,
+        }
+    }, false, '', function (res) {
+        if (res.code == 200) {
+            console.log(res.data)
+            setTextTable1(res.data)
+            $("#textSelectTable1").colResizable({
+                liveDrag: true,
+                gripInnerHtml: "<div class='grip'></div>",
+                draggingClass: "dragging",
+                resizeMode: 'fit'
+            });
+        }
+    })
+}
+
 $(function () {
     getList();
 
@@ -121,9 +161,51 @@ $(function () {
 
     });
 
+    //点击查询共享按钮显示弹窗
+    $("#share-btn").click(function () {
+        $ajax({
+            type: 'post',
+            url: '/user/getPower',
+        }, false, '', function (res) {
+            if (res.code == 200) {
+                console.log(res.data)
+                var this_power = res.data
+                if(this_power == '管理员'){
+                    $('#share-modal').modal('show');
+                    getUserList1();
+                }else{
+                    var params = []
+                    $ajax({
+                        type: 'post',
+                        url: '/user/queryList',
+                        data: JSON.stringify({
+                            addInfo: params,
+                        }),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8'
+                    }, false, '', function (res) {
+                        if (res.code == 200) {
+                            swal("", res.msg, "success");
+                            $('#share-modal').modal('hide');
+                            getList();
+                        } else {
+                            swal("", res.msg, "error");
+                        }
+                    })
+                }
+            }
+        })
+
+    });
+
     //新增弹窗里点击关闭按钮
     $('#add-close-btn').click(function () {
         $('#add-modal').modal('hide');
+    });
+
+    //新增弹窗里点击关闭按钮
+    $('#share-close-btn').click(function () {
+        $('#share-modal').modal('hide');
     });
 
     //新增弹窗里点击提交按钮
@@ -157,9 +239,44 @@ $(function () {
                 })
             }
         }
-
     });
 
+    //新增弹窗里点击提交按钮
+    $("#share-submit-btn").click(function () {
+        let rows = getTableSelection("#userSelectTable1");
+        if (rows.length > 1 || rows.length == 0) {
+            swal('请选择一个子账号查询!');
+            return;
+        }
+        var params = []
+        for(var i=0; i<rows.length; i++){
+            params.push(rows[i].data)
+           var this_id = rows[i].data.id
+        }
+        var msg = confirm("确认查看当前选中子账号的产品列表？");
+        if (msg) {
+            if (checkForm('#add-form')) {
+                $ajax({
+                    type: 'post',
+                    url: '/textRestrictions/getListByUser',
+                    data: JSON.stringify({
+                        this_id: this_id,
+                    }),
+                    dataType: 'json',
+                    contentType: 'application/json;charset=utf-8'
+                }, false, '', function (res) {
+                    if (res.code == 200) {
+                        swal("", res.msg, "success");
+                        $('#share-modal').modal('hide');
+                        $('#share1-modal').modal('show');
+                        getListFounder1();
+                    } else {
+                        swal("", res.msg, "error");
+                    }
+                })
+            }
+        }
+    });
 
     //点击删除按钮
     $('#delete-btn').click(function () {
@@ -555,6 +672,106 @@ function setUserTable(data) {
     })
 }
 
+function setUserTable1(data) {
+    if ($('#userSelectTable1').html != '') {
+        $('#userSelectTable1').bootstrapTable('load', data);
+    }
+
+    $('#userSelectTable1').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        pagination: true,
+        pageSize: 15,//单页记录数
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 30,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'username',
+                title: '用户名',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },{
+                field: 'name',
+                title: '姓名',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            }, {
+                field: 'department',
+                title: '部门',
+                align: 'center',
+                sortable: true,
+                width: 100,
+            }
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
+function setTextTable1(data) {
+    if ($('#textSelectTable1').html != '') {
+        $('#textSelectTable1').bootstrapTable('load', data);
+    }
+
+    $('#textSelectTable1').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        // clickToSelect: true,
+        pageSize: 10,//单页记录数
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 50,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'product',
+                title: '产品名称',
+                align: 'center',
+                sortable: true,
+                width: 150,
+            },
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
 
 function pass(id) {
     $.session.set('id', id)

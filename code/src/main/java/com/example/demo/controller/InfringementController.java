@@ -42,11 +42,11 @@ public class InfringementController {
     @RequestMapping("/getList")
     public ResultInfo getList(HttpSession session) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
-        if(!userInfo.getPower().equals("管理员")){
-            if(!userInfo.getChange().equals("是")){
-                return ResultInfo.error(401, "无权限");
-            }
-        }
+//        if(!userInfo.getPower().equals("管理员")){
+//            if(!userInfo.getChange().equals("是")){
+//                return ResultInfo.error(401, "无权限");
+//            }
+//        }
         try {
             List<Infringement> getList = infringementService.getList();
             return ResultInfo.success("获取成功", getList);
@@ -82,6 +82,11 @@ public class InfringementController {
     public ResultInfo add(@RequestBody HashMap map, HttpSession session) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
         GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
+        if(!userInfo.getPower().equals("管理员")){
+            if(!userInfo.getChange().equals("是")){
+                return ResultInfo.error(401, "无权限");
+            }
+        }
         try {
             Infringement infringement = GsonUtil.toEntity(gsonUtil.get("addInfo"), Infringement.class);
             String text = infringement.getText();
@@ -115,6 +120,11 @@ public class InfringementController {
     public ResultInfo update(@RequestBody String updateJson,HttpSession session) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
         Infringement infringement = null;
+        if(!userInfo.getPower().equals("管理员")){
+            if(!userInfo.getChange().equals("是")){
+                return ResultInfo.error(401, "无权限");
+            }
+        }
         try {
             infringement = DecodeUtil.decodeToJson(updateJson, Infringement.class);
             infringementService.update(infringement.getText(),infringement.getReplaceText(),infringement.getId());
@@ -138,6 +148,11 @@ public class InfringementController {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
         GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
         List<Integer> idList = GsonUtil.toList(gsonUtil.get("idList"), Integer.class);
+        if(!userInfo.getPower().equals("管理员")){
+            if(!userInfo.getChange().equals("是")){
+                return ResultInfo.error(401, "无权限");
+            }
+        }
         try {
             if (infringementService.delete(idList)) {
                 return ResultInfo.success("删除成功", idList);

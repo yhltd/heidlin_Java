@@ -56,6 +56,10 @@
             <i class="bi bi-trash icon"></i>
             删除
         </button>
+        <button id="share-btn" class="btn btn-primary">
+            <i class="bi bi-search icon"></i>
+            查询共享
+        </button>
         <a class="btn btn-primary" style="color: white;padding-top: 8px">当前页：产品设置</a>
     </div>
 </div>
@@ -97,6 +101,49 @@
         </div>
     </div>
 </div>
+
+<div id="share-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">共享</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 800px">
+                <table id="userSelectTable1"></table>
+            </div>
+
+            <div class="border-top" style="padding: 15px;">
+                <button id="share-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    <!--                    <a href="randomText.html">提交</a>-->
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="share1-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">共享</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 800px">
+                <table id="textSelectTable1"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="add1-modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
