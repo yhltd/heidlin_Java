@@ -1,6 +1,16 @@
 let p_id = ""
 
 function getList() {
+    //打开页面隐藏查看共享按钮
+    $ajax({
+        type: 'post',
+        url: '/user/getPower',
+    }, false, '', function (res) {
+        var this_power = res.data
+        if(this_power != '管理员') {
+            $('#share-btn').hide();
+        }
+    })
     $('#this_column').val("");
     $ajax({
         type: 'post',
@@ -683,10 +693,10 @@ function setUserTable1(data) {
         classes: 'table table-hover text-nowrap table table-bordered',
         idField: 'id',
         pagination: true,
-        pageSize: 15,//单页记录数
+        pageSize: 10,//单页记录数
         clickToSelect: true,
         locale: 'zh-CN',
-        toolbarAlign: 'left',
+        // toolbarAlign: 'left',
         theadClasses: "thead-light",//这里设置表头样式
         style:'table-layout:fixed',
         columns: [
@@ -739,10 +749,11 @@ function setTextTable1(data) {
         sortStable: true,
         classes: 'table table-hover text-nowrap table table-bordered',
         idField: 'id',
-        // clickToSelect: true,
-        pageSize: 10,//单页记录数
+        pagination: true,
+        pageSize: 8,//单页记录数
+        clickToSelect: true,
         locale: 'zh-CN',
-        toolbarAlign: 'left',
+        // toolbarAlign: 'left',
         theadClasses: "thead-light",//这里设置表头样式
         style:'table-layout:fixed',
         columns: [

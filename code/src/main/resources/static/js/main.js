@@ -10,6 +10,17 @@
 
 $(function () {
 
+    //登陆后不是管理员隐藏账号管理
+    $ajax({
+        type: 'post',
+        url: '/user/getPower',
+    }, false, '', function (res) {
+        var this_power = res.data
+        if(this_power != '管理员' && this_power !=undefined) {
+            document.getElementById('zhglid').style.display = 'none';
+        }
+    })
+
     var onload_url = $.session.get('onload_url');
     if (onload_url != undefined && onload_url !=''){
         $('#iframe').attr('src', onload_url);
