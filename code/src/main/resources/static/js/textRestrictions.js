@@ -1,4 +1,5 @@
 let p_id = ""
+let founder = ""
 
 function getList() {
     //打开页面隐藏查看共享按钮
@@ -9,6 +10,8 @@ function getList() {
         var this_power = res.data
         if(this_power != '管理员') {
             $('#share-btn').hide();
+            $('#share-del-btn').hide();
+            $('#share-set-btn').hide();
         }
     })
     $('#this_column').val("");
@@ -54,6 +57,32 @@ function getUserList1() {
     })
 }
 
+function getUserList2() {
+    $('#this_column').val("");
+    $ajax({
+        type: 'post',
+        url: '/user/getUserList',
+    }, false, '', function (res) {
+        if (res.code == 200) {
+            console.log(res.data)
+            setUserTable2(res.data)
+        }
+    })
+}
+
+function getUserList3() {
+    $('#this_column').val("");
+    $ajax({
+        type: 'post',
+        url: '/user/getUserList',
+    }, false, '', function (res) {
+        if (res.code == 200) {
+            console.log(res.data)
+            setUserTable3(res.data)
+        }
+    })
+}
+
 function getListFounder1() {
     let rows = getTableSelection("#userSelectTable1");
     var params = []
@@ -72,6 +101,62 @@ function getListFounder1() {
             console.log(res.data)
             setTextTable1(res.data)
             $("#textSelectTable1").colResizable({
+                liveDrag: true,
+                gripInnerHtml: "<div class='grip'></div>",
+                draggingClass: "dragging",
+                resizeMode: 'fit'
+            });
+        }
+    })
+}
+
+function getListFounder2() {
+        let rows = getTableSelection("#userSelectTable2");
+        var params = []
+        for(var i=0; i<rows.length; i++){
+        params.push(rows[i].data)
+        var this_id = rows[i].data.id
+    }
+    $ajax({
+        type: 'post',
+        url: '/textRestrictions/getListByUser',
+        data:{
+            this_id: this_id,
+        }
+    }, false, '', function (res) {
+        if (res.code == 200) {
+            console.log(res.data)
+            setTextTable2(res.data)
+            $("#textSelectTable2").colResizable({
+                liveDrag: true,
+                gripInnerHtml: "<div class='grip'></div>",
+                draggingClass: "dragging",
+                resizeMode: 'fit'
+            });
+        }
+    })
+}
+
+function getListFounder3() {
+    let rows = getTableSelection("#userSelectTable3");
+    var params = []
+    for(var i=0; i<rows.length; i++){
+        params.push(rows[i].data)
+        var this_id = rows[i].data.id
+        var founder = rows[i].data.founder
+    }
+    $ajax({
+        type: 'post',
+        url: '/textRestrictions/getList',
+        data:{
+            this_id: this_id,
+            founder: founder
+        }
+    }, false, '', function (res) {
+        if (res.code == 200) {
+            console.log(res.data)
+            setTextTable3(res.data)
+            $("#textSelectTable3").colResizable({
                 liveDrag: true,
                 gripInnerHtml: "<div class='grip'></div>",
                 draggingClass: "dragging",
@@ -208,6 +293,77 @@ $(function () {
 
     });
 
+    // 点击删除共享按钮显示弹窗
+    $("#share-del-btn").click(function () {
+        $ajax({
+            type: 'post',
+            url: '/user/getPower',
+        }, false, '', function (res) {
+            if (res.code == 200) {
+                console.log(res.data)
+                var this_power = res.data
+                if(this_power == '管理员'){
+                    $('#share-del-modal').modal('show');
+                    getUserList2();
+                }else{
+                    var params = []
+                    $ajax({
+                        type: 'post',
+                        url: '/user/queryList',
+                        data: JSON.stringify({
+                            addInfo: params,
+                        }),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8'
+                    }, false, '', function (res) {
+                        if (res.code == 200) {
+                            swal("", res.msg, "success");
+                            getList();
+                        } else {
+                            swal("", res.msg, "error");
+                        }
+                    })
+                }
+            }
+        })
+
+    });
+
+    //点击设置共享按钮显示弹窗
+    $("#share-set-btn").click(function () {
+        $ajax({
+            type: 'post',
+            url: '/user/getPower',
+        }, false, '', function (res) {
+            if (res.code == 200) {
+                console.log(res.data)
+                var this_power = res.data
+                if(this_power == '管理员'){
+                    $('#share-set-modal').modal('show');
+                    getUserList3();
+                }else{
+                    var params = []
+                    $ajax({
+                        type: 'post',
+                        url: '/user/queryList',
+                        data: JSON.stringify({
+                            addInfo: params,
+                        }),
+                        dataType: 'json',
+                        contentType: 'application/json;charset=utf-8'
+                    }, false, '', function (res) {
+                        if (res.code == 200) {
+                            swal("", res.msg, "success");
+                            getList();
+                        } else {
+                            swal("", res.msg, "error");
+                        }
+                    })
+                }
+            }
+        })
+    });
+
     //新增弹窗里点击关闭按钮
     $('#add-close-btn').click(function () {
         $('#add-modal').modal('hide');
@@ -251,6 +407,128 @@ $(function () {
         }
     });
 
+    //删除弹窗里点击提交按钮
+    $("#share-del-submit-btn").click(function () {
+        let rows = getTableSelection("#userSelectTable2");
+        console.log(rows)
+        var params = []
+        var founder = []
+        for(var i=0; i<rows.length; i++){
+            params.push(rows[i].data)
+            founder.push(rows[i].data.founder)
+        }
+        $ajax({
+            type: 'post',
+            url: '/textRestrictions/getList',
+            data: JSON.stringify({
+                addInfo: params,
+                founder: founder
+            }),
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        }, false, '', function (res) {
+            if (res.code == 200) {
+                swal("", res.msg, "success");
+                $('#share-del-modal1').modal('show');
+                getListFounder2();
+            } else {
+                swal("", res.msg, "error");
+            }
+        })
+    });
+
+    $("#share-set-submit-btn").click(function () {
+        let rows = getTableSelection("#userSelectTable3");
+        console.log(rows)
+        var textList = []
+        var founder = []
+        for(var i=0; i<rows.length; i++){
+            textList.push(rows[i].data.textList)
+            founder.push(rows[i].data.founder)
+        }
+        $ajax({
+            type: 'post',
+            url: '/textRestrictions/queryList',
+            data: JSON.stringify({
+                textList: textList,
+                founder: founder
+            }),
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        }, false, '', function (res) {
+            // if (res.code == 200) {
+                swal("", res.msg, "success");
+                $('#share-set-modal1').modal('show');
+                getListFounder3();
+            // } else {
+            //     swal("", res.msg, "error");
+            // }
+        })
+    });
+
+    //新增弹窗里点击提交按钮
+    $("#share-del-submit-btn1").click(function () {
+        let rows = getTableSelection("#textSelectTable2");
+        console.log(rows)
+        let founder = [];
+        $.each(rows, function (index, row) {
+            founder.push(row.data.founder)
+        });
+
+        var msg = confirm("确认要删除当前选择用户的产品列表？");
+        if (msg) {
+            $ajax({
+                type: 'post',
+                url: '/textRestrictions/deleteByFounder',
+                data: JSON.stringify({
+                    founder: founder
+                }),
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8'
+            }, false, '', function (res) {
+                if (res.code == 200) {
+                    swal("", res.msg, "success");
+                    $('#share-del-modal').modal('hide');
+                    $('#share-del-modal1').modal('hide');
+                    getList();
+                } else {
+                    swal("", res.msg, "error");
+                }
+            })
+        }
+    });
+
+    $("#share-set-submit-btn1").click(function () {
+        let rows = getTableSelection("#textSelectTable3");
+        console.log(rows)
+        var textList = []
+        for(var i=0; i<rows.length; i++){
+            textList.push(rows[i].data)
+        }
+        console.log(textList)
+        var msg = confirm("确认要将当前选中的商品共享给选择的用户？");
+        if (msg) {
+            $ajax({
+                type: 'post',
+                url: '/textRestrictions/insertShare',
+                data: JSON.stringify({
+                    textList: textList,
+                }),
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8'
+            }, false, '', function (res) {
+                if (res.code == 200) {
+                    swal("", res.msg, "success");
+                    $('#share-set-modal').modal('hide');
+                    $('#share-set-modal1').modal('hide');
+                    getList();
+                } else {
+                    swal("", res.msg, "error");
+                }
+            })
+        }
+    });
+
     //新增弹窗里点击提交按钮
     $("#share-submit-btn").click(function () {
         let rows = getTableSelection("#userSelectTable1");
@@ -261,7 +539,7 @@ $(function () {
         var params = []
         for(var i=0; i<rows.length; i++){
             params.push(rows[i].data)
-           var this_id = rows[i].data.id
+            var this_id = rows[i].data.id
         }
         var msg = confirm("确认查看当前选中子账号的产品列表？");
         if (msg) {
@@ -629,8 +907,6 @@ function setUserTable(data) {
         sortStable: true,
         classes: 'table table-hover text-nowrap table table-bordered',
         idField: 'id',
-        pagination: true,
-        pageSize: 15,//单页记录数
         clickToSelect: true,
         locale: 'zh-CN',
         toolbarAlign: 'left',
@@ -739,6 +1015,116 @@ function setUserTable1(data) {
     })
 }
 
+function setUserTable2(data) {
+    if ($('#userSelectTable2').html != '') {
+        $('#userSelectTable2').bootstrapTable('load', data);
+    }
+
+    $('#userSelectTable2').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 30,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'username',
+                title: '用户名',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },{
+                field: 'name',
+                title: '姓名',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            }, {
+                field: 'department',
+                title: '部门',
+                align: 'center',
+                sortable: true,
+                width: 100,
+            }
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
+function setUserTable3(data) {
+    if ($('#userSelectTable3').html != '') {
+        $('#userSelectTable3').bootstrapTable('load', data);
+    }
+
+    $('#userSelectTable3').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 30,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'username',
+                title: '用户名',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },{
+                field: 'name',
+                title: '姓名',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            }, {
+                field: 'department',
+                title: '部门',
+                align: 'center',
+                sortable: true,
+                width: 100,
+            }
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
 function setTextTable1(data) {
     if ($('#textSelectTable1').html != '') {
         $('#textSelectTable1').bootstrapTable('load', data);
@@ -754,6 +1140,98 @@ function setTextTable1(data) {
         clickToSelect: true,
         locale: 'zh-CN',
         // toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 50,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'product',
+                title: '产品名称',
+                align: 'center',
+                sortable: true,
+                width: 150,
+            },
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
+function setTextTable2(data) {
+    if ($('#textSelectTable2').html != '') {
+        $('#textSelectTable2').bootstrapTable('load', data);
+    }
+
+    $('#textSelectTable2').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 50,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'product',
+                title: '产品名称',
+                align: 'center',
+                sortable: true,
+                width: 150,
+            },
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+        rowStyle: function(row, index) {
+            // 根据需要为行添加不同的class
+            return {
+                classes: 'selected'
+            };
+        }
+    })
+}
+
+function setTextTable3(data) {
+    if ($('#textSelectTable3').html != '') {
+        $('#textSelectTable3').bootstrapTable('load', data);
+    }
+
+    $('#textSelectTable3').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
         theadClasses: "thead-light",//这里设置表头样式
         style:'table-layout:fixed',
         columns: [

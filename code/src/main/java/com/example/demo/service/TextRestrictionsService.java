@@ -105,4 +105,14 @@ public interface TextRestrictionsService extends IService<TextRestrictions> {
     boolean delete(List<Integer> idList);
 
     boolean deleteid(int id);
+
+
+//    boolean deleteByFounder(List<String> founder);
+
+    boolean deleteByFounder(String founder);
+
+    /**
+     * 添加
+     */
+    boolean insertShare(TextRestrictions textRestrictions);
 }

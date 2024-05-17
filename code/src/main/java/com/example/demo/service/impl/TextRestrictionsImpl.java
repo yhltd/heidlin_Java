@@ -107,4 +107,17 @@ public class TextRestrictionsImpl extends ServiceImpl<TextRestrictionsMapper, Te
     public boolean deleteid(int id) {
         return textRestrictionsMapper.deleteid(id);
     }
+
+//    @Override
+//    public boolean deleteByFounder(List<String> founder) {
+//        return removeByIds(founder);
+//    }
+
+    @Override
+    public boolean deleteByFounder(String founder) {return textRestrictionsMapper.deleteByFounder(founder);}
+
+    @Override
+    public boolean insertShare(TextRestrictions textRestrictions) {
+        return textRestrictionsMapper.insertShare(textRestrictions.getFounder(),textRestrictions.getTextId(),textRestrictions.getColumntext1(),textRestrictions.getNum1(),textRestrictions.getColumntext2(),textRestrictions.getNum2(),textRestrictions.getColumntext3(),textRestrictions.getNum3(),textRestrictions.getColumntext4(),textRestrictions.getNum4(),textRestrictions.getColumntext5(),textRestrictions.getNum5(),textRestrictions.getColumntext6(),textRestrictions.getNum6(),textRestrictions.getColumntext7(),textRestrictions.getNum7(),textRestrictions.getColumntext8(),textRestrictions.getNum8(),textRestrictions.getColumntext9(),textRestrictions.getNum9(),textRestrictions.getColumntext10(),textRestrictions.getNum10(),textRestrictions.getKeyword(),textRestrictions.getLongword(),textRestrictions.getScenario(),textRestrictions.getUser(),textRestrictions.getProp1(),textRestrictions.getProp2(),textRestrictions.getProp3(),textRestrictions.getProp4(),textRestrictions.getProp5(),textRestrictions.getLuckword(),textRestrictions.getPoint1(),textRestrictions.getPoint2(),textRestrictions.getPoint3(),textRestrictions.getPoint4(),textRestrictions.getPoint5(),textRestrictions.getDescription(),textRestrictions.getProp6(),textRestrictions.getProp7(),textRestrictions.getProp8(),textRestrictions.getProp9(),textRestrictions.getProp10(),textRestrictions.getProp11(),textRestrictions.getProp12(),textRestrictions.getProp13(),textRestrictions.getProp14(),textRestrictions.getProp15(),textRestrictions.getProp16(),textRestrictions.getProp17(),textRestrictions.getProp18(),textRestrictions.getProp19(),textRestrictions.getProp20(),textRestrictions.getProduct(),textRestrictions.getTitle(),textRestrictions.getTitleColor());
+    }
 }

@@ -168,7 +168,7 @@ public class TextRestrictionsController {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
         GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
         try {
-            List<UserInfo> userList = gsonUtil.toList(gsonUtil.get("addInfo"),UserInfo.class);
+            List<UserInfo> userList = GsonUtil.toList(gsonUtil.get("addInfo"),UserInfo.class);
             TextRestrictions textRestrictions = new TextRestrictions();
             if(userInfo.getPower().equals("管理员")){
                 textRestrictions.setFounder("管理员");
@@ -252,6 +252,86 @@ public class TextRestrictionsController {
             log.error("删除失败：{}", e.getMessage());
             log.error("参数：{}", idList);
             return ResultInfo.error("删除失败");
+        }
+    }
+
+    /**
+     * 删除
+     *
+     */
+//    @RequestMapping("/deleteByFounder")
+//    public ResultInfo deleteByFounder(@RequestBody HashMap map,HttpSession session) {
+//        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+//        GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
+//        List<String> founder = GsonUtil.toList(gsonUtil.get("founder"), String.class);
+//        try {
+//            for(int i=0; i<founder.size(); i++){
+//                textRestrictionsService.deleteByFounder(founder.get(i));
+//            }
+//            if (textRestrictionsService.deleteByFounder(founder.toString())) {
+//                return ResultInfo.success("删除成功", founder);
+//            } else {
+//                return ResultInfo.success("删除失败", founder);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            log.error("删除失败：{}", e.getMessage());
+//            log.error("参数：{}", founder);
+//            return ResultInfo.error("删除失败");
+//        }
+//    }
+
+    /**
+     * 删除
+     *
+     * @param map
+     * @return ResultInfo
+     */
+    @RequestMapping("/deleteByFounder")
+    public ResultInfo deleteByFounder(@RequestBody HashMap map,HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
+        List<String> founder = GsonUtil.toList(gsonUtil.get("founder"), String.class);
+        try {
+            for(int i=0; i<founder.size(); i++){
+                textRestrictionsService.deleteByFounder(founder.get(i));
+            }
+            if (textRestrictionsService.deleteByFounder(founder.toString())) {
+                return ResultInfo.success("删除失败", founder);
+            } else {
+                return ResultInfo.success("删除成功", founder);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("删除失败：{}", e.getMessage());
+            log.error("参数：{}", founder);
+            return ResultInfo.error("删除失败");
+        }
+    }
+
+    /**
+     * 添加
+     */
+    @RequestMapping("/insertShare")
+    public ResultInfo insertShare(@RequestBody HashMap map, HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
+        try {
+            List<UserInfo> userInfoList = userInfoService.getListid();
+            List<TextRestrictions> textRestrictionsList = GsonUtil.toList(gsonUtil.get("textList"), TextRestrictions.class);
+            for(int i=0; i<textRestrictionsList.size(); i++){
+                if(textRestrictionsList.get(i).getFounder().equals("管理员")){
+                    textRestrictionsList.get(i).setFounder(userInfoList.get(0).getId().toString());
+                    textRestrictionsList.get(i).setTextId(textRestrictionsList.get(i).getId());
+                    textRestrictionsService.insertShare(textRestrictionsList.get(i));
+                }
+            }
+            return ResultInfo.success("添加成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("添加失败：{}", e.getMessage());
+            log.error("参数：{}", map);
+            return ResultInfo.error("添加失败");
         }
     }
 
