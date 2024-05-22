@@ -83,12 +83,26 @@ function getUserList3() {
     })
 }
 
+// function getUserList4() {
+//     $('#this_column').val("");
+//     $ajax({
+//         type: 'post',
+//         url: '/textRestrictions/getUserList',
+//     }, false, '', function (res) {
+//         if (res.code == 200) {
+//             console.log(res.data)
+//             setUserTable4(res.data)
+//         }
+//     })
+// }
+
 function getListFounder1() {
     let rows = getTableSelection("#userSelectTable1");
     var params = []
+    var this_id = []
     for(var i=0; i<rows.length; i++){
         params.push(rows[i].data)
-        var this_id = rows[i].data.id
+        this_id.push(rows[i].data.id)
     }
     $ajax({
         type: 'post',
@@ -140,17 +154,16 @@ function getListFounder2() {
 function getListFounder3() {
     let rows = getTableSelection("#userSelectTable3");
     var params = []
+    var founder = []
     for(var i=0; i<rows.length; i++){
         params.push(rows[i].data)
-        var this_id = rows[i].data.id
-        var founder = rows[i].data.founder
+        founder.push(rows[i].data.id)
     }
     $ajax({
         type: 'post',
         url: '/textRestrictions/getList',
         data:{
-            this_id: this_id,
-            founder: founder
+            founder: founder,
         }
     }, false, '', function (res) {
         if (res.code == 200) {
@@ -165,6 +178,33 @@ function getListFounder3() {
         }
     })
 }
+
+// function getListFounder4() {
+//     let rows = getTableSelection("#userSelectTable4");
+//     var params = []
+//     for(var i=0; i<rows.length; i++){
+//         params.push(rows[i].data)
+//         var founder = rows[i].data.id
+//     }
+//     $ajax({
+//         type: 'post',
+//         url: '/textRestrictions/getShareByFounder',
+//         data:{
+//             founder: founder
+//         }
+//     }, false, '', function (res) {
+//         if (res.code == 200) {
+//             console.log(res.data)
+//             setTextTable4(res.data)
+//             $("#textSelectTable4").colResizable({
+//                 liveDrag: true,
+//                 gripInnerHtml: "<div class='grip'></div>",
+//                 draggingClass: "dragging",
+//                 resizeMode: 'fit'
+//             });
+//         }
+//     })
+// }
 
 $(function () {
     getList();
@@ -441,23 +481,23 @@ $(function () {
         let rows = getTableSelection("#userSelectTable3");
         console.log(rows)
         var textList = []
-        var founder = []
+        // var id = []
         for(var i=0; i<rows.length; i++){
             textList.push(rows[i].data.textList)
-            founder.push(rows[i].data.founder)
+            // id.push(rows[i].data.founder)
         }
         $ajax({
             type: 'post',
             url: '/textRestrictions/queryList',
             data: JSON.stringify({
                 textList: textList,
-                founder: founder
+                // founder: id
             }),
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
         }, false, '', function (res) {
             // if (res.code == 200) {
-                swal("", res.msg, "success");
+            //     swal("", res.msg, "success");
                 $('#share-set-modal1').modal('show');
                 getListFounder3();
             // } else {
@@ -505,27 +545,40 @@ $(function () {
         for(var i=0; i<rows.length; i++){
             textList.push(rows[i].data)
         }
+
+        let rows1 = getTableSelection("#userSelectTable3");
+        console.log(rows1)
+        let id = [];
+        // var founder = ""
+        for(var i=0; i<rows1.length; i++){
+            id.push(rows1[i].data.id)
+        }
+
         console.log(textList)
-        var msg = confirm("确认要将当前选中的商品共享给选择的用户？");
+        console.log(id)
+        var msg = confirm("确认要将当前创建的商品共享给这些用户？");
         if (msg) {
-            $ajax({
-                type: 'post',
-                url: '/textRestrictions/insertShare',
-                data: JSON.stringify({
-                    textList: textList,
-                }),
-                dataType: 'json',
-                contentType: 'application/json;charset=utf-8'
-            }, false, '', function (res) {
-                if (res.code == 200) {
-                    swal("", res.msg, "success");
-                    $('#share-set-modal').modal('hide');
-                    $('#share-set-modal1').modal('hide');
-                    getList();
-                } else {
-                    swal("", res.msg, "error");
-                }
-            })
+            if (checkForm('#add-form')) {
+                $ajax({
+                    type: 'post',
+                    url: '/textRestrictions/insertShare',
+                    data: JSON.stringify({
+                        textList: textList,
+                        id: id
+                    }),
+                    dataType: 'json',
+                    contentType: 'application/json;charset=utf-8'
+                }, false, '', function (res) {
+                    if (res.code == 200) {
+                        swal("", res.msg, "success");
+                        $('#share-set-modal').modal('hide');
+                        $('#share-set-modal1').modal('hide');
+                        getList();
+                    } else {
+                        swal("", res.msg, "error");
+                    }
+                })
+            }
         }
     });
 
@@ -565,6 +618,82 @@ $(function () {
             }
         }
     });
+
+    // 点击设置子账号按钮显示弹窗
+    // $("#set-del-share-btn").click(function () {
+    //     $('#set-del-share-modal').modal('show');
+    //     getUserList4();
+    // });
+
+    //设置子账号弹窗里点击查看共享按钮
+    // $("#sel-submit-btn").click(function () {
+    //     let rows = getTableSelection("#userSelectTable4");
+    //     if (rows.length > 1 || rows.length == 0) {
+    //         swal('请选择一个子账号查看!');
+    //         return;
+    //     }
+    //     var params = []
+    //     for(var i=0; i<rows.length; i++){
+    //         params.push(rows[i].data)
+    //         var founder = rows[i].data.id
+    //     }
+    //     console.log(founder)
+    //     var msg = confirm("确认查看当前选中子账号的产品列表？");
+    //     if (msg) {
+    //         $ajax({
+    //             type: 'post',
+    //             url: '/textRestrictions/getShareByFounder',
+    //             data: JSON.stringify({
+    //                 id: founder
+    //             }),
+    //             dataType: 'json',
+    //             contentType: 'application/json;charset=utf-8'
+    //         }, false, '', function (res) {
+    //             if (res.code == 200) {
+    //                 swal("", res.msg, "success");
+    //                 getListFounder4();
+    //             } else {
+    //                 swal("", res.msg, "error");
+    //             }
+    //         })
+    //     }
+    // });
+
+    //设置子账号弹窗里点击删除按钮
+    // $("#del-submit-btn").click(function () {
+    //     let rows = getTableSelection("#textSelectTable4");
+    //     if (rows.length == 0) {
+    //         swal('请选择需要删除的产品!');
+    //         return;
+    //     }
+    //     let founder = [];
+    //     let id = [];
+    //     $.each(rows, function (index, row) {
+    //         founder.push(row.data.founder)
+    //         id.push(row.data.id)
+    //     });
+    //     console.log(founder)
+    //     var msg = confirm("确认删除选中子账号的产品？");
+    //     if (msg) {
+    //         $ajax({
+    //             type: 'post',
+    //             url: '/textRestrictions/deleteByFounder',
+    //             data: JSON.stringify({
+    //                 founder: founder,
+    //                 id: id
+    //             }),
+    //             dataType: 'json',
+    //             contentType: 'application/json;charset=utf-8'
+    //         }, false, '', function (res) {
+    //             // if (res.code == 200) {
+    //             //     swal("", res.msg, "success");
+    //                 getListFounder4();
+    //             // } else {
+    //             //     swal("", res.msg, "error");
+    //             // }
+    //         })
+    //     }
+    // });
 
     //点击删除按钮
     $('#delete-btn').click(function () {
@@ -675,8 +804,6 @@ function setTable(data) {
         sortStable: true,
         classes: 'table table-hover text-nowrap table table-bordered',
         idField: 'id',
-        pagination: true,
-        pageSize: 15,//单页记录数
         clickToSelect: true,
         locale: 'zh-CN',
         toolbar: '#table-toolbar',
@@ -884,7 +1011,6 @@ function setTable(data) {
                 $(el).addClass('selected')
             }
         }
-
     })
     var aa = $.session.get('ee')
     if(aa!=''){
@@ -1125,6 +1251,61 @@ function setUserTable3(data) {
     })
 }
 
+// function setUserTable4(data) {
+//     if ($('#userSelectTable4').html != '') {
+//         $('#userSelectTable4').bootstrapTable('load', data);
+//     }
+//
+//     $('#userSelectTable4').bootstrapTable({
+//         data: data,
+//         sortStable: true,
+//         classes: 'table table-hover text-nowrap table table-bordered',
+//         idField: 'id',
+//         clickToSelect: true,
+//         locale: 'zh-CN',
+//         toolbarAlign: 'left',
+//         theadClasses: "thead-light",//这里设置表头样式
+//         style:'table-layout:fixed',
+//         columns: [
+//             {
+//                 field: '',
+//                 title: '序号',
+//                 align: 'center',
+//                 width: 30,
+//                 formatter: function (value, row, index) {
+//                     return index + 1;
+//                 }
+//             }, {
+//                 field: 'username',
+//                 title: '用户名',
+//                 align: 'center',
+//                 sortable: true,
+//                 width: 80,
+//             },{
+//                 field: 'name',
+//                 title: '姓名',
+//                 align: 'center',
+//                 sortable: true,
+//                 width: 80,
+//             }, {
+//                 field: 'department',
+//                 title: '部门',
+//                 align: 'center',
+//                 sortable: true,
+//                 width: 100,
+//             }
+//         ],
+//         onClickRow: function (row, el) {
+//             let isSelect = $(el).hasClass('selected')
+//             if (isSelect) {
+//                 $(el).removeClass('selected')
+//             } else {
+//                 $(el).addClass('selected')
+//             }
+//         },
+//     })
+// }
+
 function setTextTable1(data) {
     if ($('#textSelectTable1').html != '') {
         $('#textSelectTable1').bootstrapTable('load', data);
@@ -1259,8 +1440,57 @@ function setTextTable3(data) {
                 $(el).addClass('selected')
             }
         },
+        rowStyle: function(row, index) {
+            // 根据需要为行添加不同的class
+            return {
+                classes: 'selected'
+            };
+        }
     })
 }
+
+// function setTextTable4(data) {
+//     if ($('#textSelectTable4').html != '') {
+//         $('#textSelectTable4').bootstrapTable('load', data);
+//     }
+//
+//     $('#textSelectTable4').bootstrapTable({
+//         data: data,
+//         sortStable: true,
+//         classes: 'table table-hover text-nowrap table table-bordered',
+//         idField: 'id',
+//         clickToSelect: true,
+//         locale: 'zh-CN',
+//         toolbarAlign: 'left',
+//         theadClasses: "thead-light",//这里设置表头样式
+//         style:'table-layout:fixed',
+//         columns: [
+//             {
+//                 field: '',
+//                 title: '序号',
+//                 align: 'center',
+//                 width: 50,
+//                 formatter: function (value, row, index) {
+//                     return index + 1;
+//                 }
+//             }, {
+//                 field: 'product',
+//                 title: '产品名称',
+//                 align: 'center',
+//                 sortable: true,
+//                 width: 150,
+//             },
+//         ],
+//         onClickRow: function (row, el) {
+//             let isSelect = $(el).hasClass('selected')
+//             if (isSelect) {
+//                 $(el).removeClass('selected')
+//             } else {
+//                 $(el).addClass('selected')
+//             }
+//         },
+//     })
+// }
 
 function pass(id) {
     $.session.set('id', id)

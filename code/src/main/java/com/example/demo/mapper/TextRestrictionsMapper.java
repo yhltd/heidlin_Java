@@ -2,7 +2,6 @@ package com.example.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.demo.entity.TextRestrictions;
-import com.example.demo.entity.UserInfo;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -63,6 +62,9 @@ public interface TextRestrictionsMapper extends BaseMapper<TextRestrictions> {
     @Delete("delete from textRestrictions where text_id=#{id}")
     boolean deleteid(int id);
 
+//    @Delete("delete from textRestrictions where founder=#{founder} and id=#{id}")
+//    boolean deleteByFounder(String founder, int id);
+
     @Delete("delete from textRestrictions where founder=#{founder}")
     boolean deleteByFounder(String founder);
 
@@ -71,4 +73,7 @@ public interface TextRestrictionsMapper extends BaseMapper<TextRestrictions> {
 
     @Insert("insert into textRestrictions(founder,text_id,columntext1,num1,columntext2,num2,columntext3,num3,columntext4,num4,columntext5,num5,columntext6,num6,columntext7,num7,columntext8,num8,columntext9,num9,columntext10,num10,keyword,longword,scenario,[user],prop1,prop2,prop3,prop4,prop5,luckword,point1,point2,point3,point4,point5,description,prop6,prop7,prop8,prop9,prop10,prop11,prop12,prop13,prop14,prop15,prop16,prop17,prop18,prop19,prop20,product,title,title_color) values(#{founder},#{textId},#{columntext1},#{num1},#{columntext2},#{num2},#{columntext3},#{num3},#{columntext4},#{num4},#{columntext5},#{num5},#{columntext6},#{num6},#{columntext7},#{num7},#{columntext8},#{num8},#{columntext9},#{num9},#{columntext10},#{num10},#{keyword},#{longword},#{scenario},#{user},#{prop1},#{prop2},#{prop3},#{prop4},#{prop5},#{luckword},#{point1},#{point2},#{point3},#{point4},#{point5},#{description},#{prop6},#{prop7},#{prop8},#{prop9},#{prop10},#{prop11},#{prop12},#{prop13},#{prop14},#{prop15},#{prop16},#{prop17},#{prop18},#{prop19},#{prop20},#{product},#{title},#{titleColor})")
     boolean insertShare(String founder,int textId,String columntext1,String num1,String columntext2,String num2,String columntext3,String num3,String columntext4,String num4,String columntext5,String num5,String columntext6,String num6,String columntext7,String num7,String columntext8,String num8,String columntext9,String num9,String columntext10,String num10,String keyword,String longword,String scenario,String user,String prop1,String prop2,String prop3,String prop4,String prop5,String luckword,String point1,String point2,String point3,String point4,String point5,String description,String prop6,String prop7,String prop8,String prop9,String prop10,String prop11,String prop12,String prop13,String prop14,String prop15,String prop16,String prop17,String prop18,String prop19,String prop20,String product,String title,String titleColor);
+
+    @Select("select * from textRestrictions where founder = #{founder}")
+    List<TextRestrictions> getShareByFounder(String founder);
 }

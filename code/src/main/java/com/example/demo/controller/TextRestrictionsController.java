@@ -292,12 +292,14 @@ public class TextRestrictionsController {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
         GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
         List<String> founder = GsonUtil.toList(gsonUtil.get("founder"), String.class);
+//        List<Integer> id = GsonUtil.toList(gsonUtil.get("id"), Integer.class);
         try {
             for(int i=0; i<founder.size(); i++){
                 textRestrictionsService.deleteByFounder(founder.get(i));
             }
+//            if (textRestrictionsService.deleteByFounder(founder.toString(), Integer.parseInt(id.toString()))) {
             if (textRestrictionsService.deleteByFounder(founder.toString())) {
-                return ResultInfo.success("删除失败", founder);
+                return ResultInfo.success("删除成功", founder);
             } else {
                 return ResultInfo.success("删除成功", founder);
             }
@@ -305,6 +307,7 @@ public class TextRestrictionsController {
             e.printStackTrace();
             log.error("删除失败：{}", e.getMessage());
             log.error("参数：{}", founder);
+//            log.error("参数：{}", id);
             return ResultInfo.error("删除失败");
         }
     }
@@ -312,26 +315,75 @@ public class TextRestrictionsController {
     /**
      * 添加
      */
+//    @RequestMapping("/insertShare")
+//    public ResultInfo insertShare(@RequestBody HashMap map, HttpSession session) {
+//        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+//        GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
+//        try {
+////            List<UserInfo> userInfoList = userInfoService.getListid();
+//            TextRestrictions textRestrictions = new TextRestrictions();
+//            List<UserInfo> userList = GsonUtil.toList(gsonUtil.get("textList"),UserInfo.class);
+//
+//            List<TextRestrictions> textRestrictionsList = GsonUtil.toList(gsonUtil.get("textList"), TextRestrictions.class);
+////            List<TextRestrictions> founder = GsonUtil.toList(gsonUtil.get("id"), TextRestrictions.class);
+//            for(int i=0; i<textRestrictionsList.size(); i++){
+//                if(textRestrictionsList.get(i).getFounder().equals("管理员")){
+//                    textRestrictionsList.get(i).setFounder(textRestrictionsList.get(i).getFounder());
+//                    textRestrictionsList.get(i).setTextId(textRestrictionsList.get(i).getId());
+//                    textRestrictionsService.insertShare(textRestrictionsList.get(i));
+//                }
+//            }
+//            return ResultInfo.success("添加成功");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            log.error("添加失败：{}", e.getMessage());
+//            log.error("参数：{}", map);
+//            return ResultInfo.error("添加失败");
+//        }
+//    }
+
     @RequestMapping("/insertShare")
     public ResultInfo insertShare(@RequestBody HashMap map, HttpSession session) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
         GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
+
+        GsonUtil gsonUtil1 = new GsonUtil(GsonUtil.toJson(map));
+        List<Integer> id = GsonUtil.toList(gsonUtil1.get("id"), Integer.class);
         try {
-            List<UserInfo> userInfoList = userInfoService.getListid();
-            List<TextRestrictions> textRestrictionsList = GsonUtil.toList(gsonUtil.get("textList"), TextRestrictions.class);
-            for(int i=0; i<textRestrictionsList.size(); i++){
-                if(textRestrictionsList.get(i).getFounder().equals("管理员")){
-                    textRestrictionsList.get(i).setFounder(userInfoList.get(0).getId().toString());
-                    textRestrictionsList.get(i).setTextId(textRestrictionsList.get(i).getId());
-                    textRestrictionsService.insertShare(textRestrictionsList.get(i));
-                }
+            TextRestrictions textRestrictions = new TextRestrictions();
+            if(userInfo.getPower().equals("管理员")){
+                textRestrictions.setFounder("管理员");
+            }else{
+                textRestrictions.setFounder(userInfo.getId().toString());
+            }
+            if(userInfo.getPower().equals("管理员")){
+                List<UserInfo> userList =  userInfoService.getUserList();
+                List<TextRestrictions> textRestrictionsList = GsonUtil.toList(gsonUtil.get("textList"), TextRestrictions.class);
+                    for(int i=0; i<textRestrictionsList.size(); i++){
+                        textRestrictionsList.get(i).setFounder(id.get(0).toString());
+                        textRestrictionsList.get(i).setTextId(textRestrictionsList.get(i).getId());
+                        textRestrictionsService.insertShare(textRestrictionsList.get(i));
+                    }
             }
             return ResultInfo.success("添加成功");
         } catch (Exception e) {
             e.printStackTrace();
             log.error("添加失败：{}", e.getMessage());
-            log.error("参数：{}", map);
             return ResultInfo.error("添加失败");
+        }
+    }
+
+    @RequestMapping("/getShareByFounder")
+    public ResultInfo getShareByFounder(String founder,HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        try {
+            List<TextRestrictions> getShareByFounder = textRestrictionsService.getShareByFounder(founder);
+
+            return ResultInfo.success("获取成功", getShareByFounder);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
         }
     }
 

@@ -109,10 +109,17 @@ public interface TextRestrictionsService extends IService<TextRestrictions> {
 
 //    boolean deleteByFounder(List<String> founder);
 
+//    boolean deleteByFounder(String founder,int id);
+
     boolean deleteByFounder(String founder);
 
     /**
      * 添加
      */
     boolean insertShare(TextRestrictions textRestrictions);
+
+    /**
+     * 查询
+     */
+    List<TextRestrictions> getShareByFounder(String founder);
 }
