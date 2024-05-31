@@ -99,10 +99,11 @@ function getUserList3() {
 function getListFounder1() {
     let rows = getTableSelection("#userSelectTable1");
     var params = []
-    var this_id = []
+    // var this_id = []
     for(var i=0; i<rows.length; i++){
         params.push(rows[i].data)
-        this_id.push(rows[i].data.id)
+        // this_id.push(rows[i].data.id)
+        var this_id = rows[i].data.id
     }
     $ajax({
         type: 'post',
@@ -1210,7 +1211,7 @@ function setUserTable3(data) {
         locale: 'zh-CN',
         toolbarAlign: 'left',
         theadClasses: "thead-light",//这里设置表头样式
-        style:'table-layout:fixed',
+        style:'table-layout:fixed;with:10px',
         columns: [
             {
                 field: '',
