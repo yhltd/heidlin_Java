@@ -258,56 +258,24 @@ public class TextRestrictionsController {
     /**
      * 删除
      *
-     */
-//    @RequestMapping("/deleteByFounder")
-//    public ResultInfo deleteByFounder(@RequestBody HashMap map,HttpSession session) {
-//        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
-//        GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
-//        List<String> founder = GsonUtil.toList(gsonUtil.get("founder"), String.class);
-//        try {
-//            for(int i=0; i<founder.size(); i++){
-//                textRestrictionsService.deleteByFounder(founder.get(i));
-//            }
-//            if (textRestrictionsService.deleteByFounder(founder.toString())) {
-//                return ResultInfo.success("删除成功", founder);
-//            } else {
-//                return ResultInfo.success("删除失败", founder);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            log.error("删除失败：{}", e.getMessage());
-//            log.error("参数：{}", founder);
-//            return ResultInfo.error("删除失败");
-//        }
-//    }
-
-    /**
-     * 删除
-     *
      * @param map
      * @return ResultInfo
      */
-    @RequestMapping("/deleteByFounder")
+    @RequestMapping("/deleteById")
     public ResultInfo deleteByFounder(@RequestBody HashMap map,HttpSession session) {
         UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
         GsonUtil gsonUtil = new GsonUtil(GsonUtil.toJson(map));
-        List<String> founder = GsonUtil.toList(gsonUtil.get("founder"), String.class);
-//        List<Integer> id = GsonUtil.toList(gsonUtil.get("id"), Integer.class);
+        List<Integer> idList = GsonUtil.toList(gsonUtil.get("idList"), Integer.class);
         try {
-            for(int i=0; i<founder.size(); i++){
-                textRestrictionsService.deleteByFounder(founder.get(i));
-            }
-//            if (textRestrictionsService.deleteByFounder(founder.toString(), Integer.parseInt(id.toString()))) {
-            if (textRestrictionsService.deleteByFounder(founder.toString())) {
-                return ResultInfo.success("删除成功", founder);
+            if (textRestrictionsService.deleteById(idList)) {
+                return ResultInfo.success("删除成功", idList);
             } else {
-                return ResultInfo.success("删除成功", founder);
+                return ResultInfo.success("删除失败", idList);
             }
         } catch (Exception e) {
             e.printStackTrace();
             log.error("删除失败：{}", e.getMessage());
-            log.error("参数：{}", founder);
-//            log.error("参数：{}", id);
+            log.error("参数：{}", idList);
             return ResultInfo.error("删除失败");
         }
     }

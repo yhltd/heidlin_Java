@@ -108,16 +108,8 @@ public class TextRestrictionsImpl extends ServiceImpl<TextRestrictionsMapper, Te
         return textRestrictionsMapper.deleteid(id);
     }
 
-//    @Override
-//    public boolean deleteByFounder(List<String> founder) {
-//        return removeByIds(founder);
-//    }
-
-//    @Override
-//    public boolean deleteByFounder(String founder, int id) {return textRestrictionsMapper.deleteByFounder(founder,id);}
-
     @Override
-    public boolean deleteByFounder(String founder) {return textRestrictionsMapper.deleteByFounder(founder);}
+    public boolean deleteById(List<Integer> idList) {return removeByIds(idList);}
 
     @Override
     public boolean insertShare(TextRestrictions textRestrictions) {

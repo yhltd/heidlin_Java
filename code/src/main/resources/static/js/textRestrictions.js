@@ -511,18 +511,18 @@ $(function () {
     $("#share-del-submit-btn1").click(function () {
         let rows = getTableSelection("#textSelectTable2");
         console.log(rows)
-        let founder = [];
+        let idList = [];
         $.each(rows, function (index, row) {
-            founder.push(row.data.founder)
+            idList.push(row.data.id)
         });
 
         var msg = confirm("确认要删除当前选择用户的产品列表？");
         if (msg) {
             $ajax({
                 type: 'post',
-                url: '/textRestrictions/deleteByFounder',
+                url: '/textRestrictions/deleteById',
                 data: JSON.stringify({
-                    founder: founder
+                    idList: idList
                 }),
                 dataType: 'json',
                 contentType: 'application/json;charset=utf-8'
@@ -1392,12 +1392,12 @@ function setTextTable2(data) {
                 $(el).addClass('selected')
             }
         },
-        rowStyle: function(row, index) {
-            // 根据需要为行添加不同的class
-            return {
-                classes: 'selected'
-            };
-        }
+        // rowStyle: function(row, index) {
+        //     // 根据需要为行添加不同的class
+        //     return {
+        //         classes: 'selected'
+        //     };
+        // }
     })
 }
 
