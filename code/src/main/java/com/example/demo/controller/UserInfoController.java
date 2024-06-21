@@ -8,6 +8,9 @@ import com.example.demo.service.TextRestrictionsService;
 import com.example.demo.service.UserInfoService;
 import com.example.demo.util.*;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,6 +117,76 @@ public class UserInfoController {
     }
 
     /**
+     * 查询所有普通用户
+     *
+     * @return ResultInfo
+     */
+    @RequestMapping("/getCpById")
+    public ResultInfo getCpById(String id) {
+        try {
+            List<TextRestrictions> getList = userInfoService.getCpById(id);
+            return ResultInfo.success("获取成功", getList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+
+
+    /**
+     * 查询所有管理员权限产品
+     *
+     * @return ResultInfo
+     */
+    @RequestMapping("/getTextR")
+    public ResultInfo getTextR(HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        try {
+            List<TextRestrictions> getList = userInfoService.getTextR();
+            return ResultInfo.success("获取成功", getList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+    @RequestMapping("/getCpByUserName")
+    public ResultInfo getCpByUserName(String userName) {
+        try {
+            List<TextRestrictions> getList = userInfoService.getCpByUserName(userName);
+            if (getList == null){
+                return ResultInfo.error("查无结果");
+            }
+            return ResultInfo.success("获取成功", getList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+    /**
+     * 查询所有普通用户对应产品
+     *
+     * @return ResultInfo
+     */
+    @RequestMapping("/getUserAll")
+    public ResultInfo getUserAll(HttpSession session) {
+        UserInfo userInfo = GsonUtil.toEntity(SessionUtil.getToken(session), UserInfo.class);
+        try {
+            List<UserInfo> getList = userInfoService.getUserAll();
+            return ResultInfo.success("获取成功", getList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+    /**
      * 查询所有
      *
      * @return ResultInfo
@@ -187,6 +260,47 @@ public class UserInfoController {
             return ResultInfo.error("添加失败");
         }
     }
+
+    @RequestMapping("/info")
+    public ResultInfo info(String ids, Integer id) throws JSONException {
+        try {
+            ResultInfo info = userInfoService.info(ids, id);
+            return info;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("添加失败");
+        }
+    }
+
+    @RequestMapping("/getAccountProduct")
+    public ResultInfo getAccountProduct(Integer id) throws JSONException {
+        try {
+            ResultInfo info = userInfoService.getAccountProduct(id);
+            return info;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("添加失败");
+        }
+    }
+
+    @RequestMapping("/deleteCp")
+    public ResultInfo deleteCp(String ids, Integer id) throws JSONException {
+        try {
+            boolean info = userInfoService.deleteCp(ids, id);
+            if (info){
+                return ResultInfo.success("删除成功");
+            }else {
+                return ResultInfo.success("删除失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("删除失败");
+        }
+    }
+
 
     /**
      * 添加
@@ -284,6 +398,57 @@ public class UserInfoController {
             log.error("删除失败：{}", e.getMessage());
             log.error("参数：{}", idList);
             return ResultInfo.error("删除失败");
+        }
+    }
+
+    /**
+     * 删除该用户产品
+     *
+     * @param id
+     * @return ResultInfo
+     */
+    @RequestMapping("/isDelete")
+    public ResultInfo isDelete(int id) {
+        try {
+            if (userInfoService.isDelete(id)) {
+                return ResultInfo.success("删除成功", id);
+            } else {
+                return ResultInfo.success("删除失败", id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("删除失败：{}", e.getMessage());
+            log.error("参数：{}", id);
+            return ResultInfo.error("删除失败");
+        }
+    }
+
+    //查询用户id和账号
+    @RequestMapping("/userXx")
+    public ResultInfo userXx() {
+        try {
+            List<UserInfo> getList = userInfoService.getUserXx();
+            return ResultInfo.success("获取成功", getList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
+        }
+    }
+
+    //通过userid查询产品
+    @RequestMapping("/getCpByUserId")
+    public ResultInfo getCpByUserId(Integer userId) {
+        try {
+            List<TextRestrictions> getList = userInfoService.getCpByUserId(userId);
+            if (getList == null){
+                return ResultInfo.error("查无结果");
+            }
+            return ResultInfo.success("获取成功", getList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取失败：{}", e.getMessage());
+            return ResultInfo.error("错误!");
         }
     }
 

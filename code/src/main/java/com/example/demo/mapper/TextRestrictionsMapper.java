@@ -23,6 +23,9 @@ public interface TextRestrictionsMapper extends BaseMapper<TextRestrictions> {
     @Select("select * from textRestrictions where founder = #{founder}")
     List<TextRestrictions> getListByUser(String founder);
 
+    @Select("select id, product, text_id from textRestrictions where founder = #{founder}")
+    List<TextRestrictions> selectPcByUserId(String founder);
+
     @Select("select * from textRestrictions where id = #{id}")
     List<TextRestrictions> getListById(int id);
 
@@ -31,6 +34,9 @@ public interface TextRestrictionsMapper extends BaseMapper<TextRestrictions> {
 
     @Insert("insert into textRestrictions(founder,text_id) values(#{founder},#{textId})")
     boolean insertById2(String founder,int textId);
+
+    @Insert("insert into textRestrictions(founder,text_id,product) values(#{founder},#{textId},#{product})")
+    boolean insertToAcount(String founder,int textId, String product);
 
     @Insert("insert into textRestrictions(founder) output inserted.id values(#{founder})")
     boolean insert(String founder);
@@ -70,4 +76,7 @@ public interface TextRestrictionsMapper extends BaseMapper<TextRestrictions> {
 
     @Select("select * from textRestrictions where founder = #{founder}")
     List<TextRestrictions> getShareByFounder(String founder);
+
+    @Delete("delete from textRestrictions where founder = #{founder} and text_id = #{id}")
+    boolean deleteByFoundId(String founder, Integer id);
 }

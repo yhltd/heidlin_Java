@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.demo.entity.TextRestrictions;
 import com.example.demo.entity.UserInfo;
+import com.example.demo.util.ResultInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
@@ -72,4 +74,28 @@ public interface UserInfoService extends IService<UserInfo> {
     boolean deleteid(int id);
 
     boolean useradd(@Param("addUsername") String addUsername, String addPassword, String addName, String addDepartment, String addPower, String addChange);
+
+    List<UserInfo> getUserAll();
+
+    //查询有关用户的产品
+    List<TextRestrictions> getTextR();
+
+    List<TextRestrictions> getTextCpById(String id);
+
+    List<TextRestrictions> getCpById(String id);
+
+    //删除该用户产品
+    boolean isDelete(int id);
+
+    ResultInfo info(String ids, Integer userId);
+
+    List<UserInfo> getUserXx();
+
+    List<TextRestrictions> getCpByUserName(String userName);
+
+    boolean deleteCp(String ids, Integer id);
+
+    List<TextRestrictions> getCpByUserId(Integer userId);
+
+    ResultInfo getAccountProduct(Integer id);
 }

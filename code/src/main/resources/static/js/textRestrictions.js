@@ -12,6 +12,7 @@ function getList() {
             $('#share-btn').hide();
             $('#share-del-btn').hide();
             $('#share-set-btn').hide();
+            $('#share-setting').hide();
         }
     })
     $('#this_column').val("");
@@ -42,6 +43,29 @@ function getUserList() {
             setUserTable(res.data)
         }
     })
+}
+
+function getUserList11() {
+    $('#this_column').val("");
+    $ajax({
+        type: 'post',
+        url: '/user/getUserAll',
+    }, false, '', function (res) {
+        if (res.code == 200) {
+            console.log(res.data)
+            setUsers(res.data)
+        }
+    })
+    // $ajax({
+    //     type: 'post',
+    //     url: '/user/getTextR',
+    // }, false, '', function (res) {
+    //     console.log("11111111111", res.data)
+    //     if (res.code == 200) {
+    //         console.log(res.data)
+    //         setUsers(res.data)
+    //     }
+    // })
 }
 
 function getUserList1() {
@@ -297,6 +321,43 @@ $(function () {
 
     });
 
+    // //点击设置按钮显示弹窗
+    // $("#share-setting").click(function () {
+    //     $ajax({
+    //         type: 'post',
+    //         url: '/user/getPower',
+    //     }, false, '', function (res) {
+    //         if (res.code == 200) {
+    //             console.log("设置", res.data)
+    //             var this_power = res.data
+    //             if(this_power == '管理员'){
+    //                 $('#setting-modal').modal('show');
+    //                 getUserList11();
+    //             }else{
+    //                 var params = []
+    //                 $ajax({
+    //                     type: 'post',
+    //                     url: '/textRestrictions/add',
+    //                     data: JSON.stringify({
+    //                         addInfo: params,
+    //                     }),
+    //                     dataType: 'json',
+    //                     contentType: 'application/json;charset=utf-8'
+    //                 }, false, '', function (res) {
+    //                     if (res.code == 200) {
+    //                         swal("", res.msg, "success");
+    //                         $('#setting-modal').modal('hide');
+    //                         getList();
+    //                     } else {
+    //                         swal("", res.msg, "error");
+    //                     }
+    //                 })
+    //             }
+    //         }
+    //     })
+    //
+    // });
+
     //点击查询共享按钮显示弹窗
     $("#share-btn").click(function () {
         $ajax({
@@ -405,9 +466,231 @@ $(function () {
         })
     });
 
+    //点击设置账号产品按钮显示弹窗
+    $("#share-setting").click(function () {
+        // //查询子账号
+        // $ajax({
+        //     type: 'post',
+        //     url: '/user/userXx',
+        // }, false, '', function (res) {
+        //     console.log("res", res)
+        //         if (res.code == 200){
+        //             setUserAccount(res.data)
+        //             $('#small-account').modal('show');
+        //         }else {
+        //             confirm("网络错误，请重试")
+        //         }
+        // })
+        //查询管理员产品
+        $ajax({
+            type: 'post',
+            url: '/user/getTextR',
+        }, false, '', function (res) {
+            if (res.code == 200){
+                setAdminPc(res.data)
+                $('#admin-prodect').modal('show');
+            }else {
+                confirm("网络错误，请重试")
+            }
+        })
+        $('#account-product-modal').modal('show');
+    });
+
+    //关闭设置账号产品弹窗
+    $("#close-all").click(function () {
+        // var ids = [];
+        // var userName = null;
+        // $ajax({
+        //     type: 'post',
+        //     url: '/user/info',
+        //     data : {
+        //         ids :JSON.stringify(ids),
+        //         userName: userName
+        //     },
+        // }, false, '', function (res) {
+        //     if (res.code == 200) {
+        //         $('#account-product-modal').modal('hide');
+        //         $('#admin-prodect').modal('hide');
+        //         $('#pu-have-prodect').modal('hide');
+        //         $('#small-account').modal('hide');
+        //     }else {
+        //         $('#account-product-modal').modal('hide');
+        //         $('#admin-prodect').modal('hide');
+        //         $('#pu-have-prodect').modal('hide');
+        //         $('#small-account').modal('hide');
+        //     }
+        // })
+        $('#yy-account-product').modal('hide');
+        $('#Wyy-account-product').modal('hide');
+        $('#account-product-modal').modal('hide');
+        $('#admin-prodect').modal('hide');
+    })
+
+    //点击查询产品按钮
+    $("#add-small-account").click(function () {
+    let rows = getTableSelection("#select-admin-product");
+    if (rows.length == 0){
+        swal({
+            title : "请选择管理员产品",
+            type : "error",
+            confirmButtonText : "确定",
+            closeOnConfirm : false
+        });
+    }else if (rows.length == 1){
+        $ajax({
+            type: 'post',
+            url: '/user/getAccountProduct',
+            data:{
+                id : rows[0].data.id
+            }
+        }, false, '', function (res) {
+            console.log("res", res)
+            if (res.code == 200){
+                setYyAccount(res.data.userList)
+                $('#yy-account-product').modal('show');
+                setWyyAccount(res.data.userInfoList)
+                $('#Wyy-account-product').modal('show');
+            }else {
+                swal("", res.msg, "error");
+            }
+        })
+    }else {
+            swal({
+            title : "请选择一个管理员产品",
+            type : "error",
+            confirmButtonText : "确定",
+            closeOnConfirm : false
+            });
+        }
+    })
+
+
+    // //设置账号产品弹窗里点击查询该子账号按钮
+    // $("#add-small-account").click(function () {
+    //     let rows = getTableSelection("#select-samll-account");
+    //     if (rows.length == 0){
+    //         swal({
+    //             title : "请选择要查询的子账号",
+    //             type : "error",
+    //             confirmButtonText : "确定",
+    //             closeOnConfirm : false
+    //         });
+    //     }else if (rows.length == 1){
+    //         $ajax({
+    //             type: 'post',
+    //             url: '/user/getCpByUserId',
+    //             data:{
+    //                 userId : rows[0].data.id
+    //             }
+    //         }, false, '', function (res) {
+    //             if (res.code == 200){
+    //                 setPuPc(res.data)
+    //                 $('#pu-have-prodect').modal('show');
+    //             }else {
+    //                 swal("", res.msg, "error");
+    //             }
+    //         })
+    //     }else {
+    //         swal({
+    //             title : "请选择一个子账号查询",
+    //             type : "error",
+    //             confirmButtonText : "确定",
+    //             closeOnConfirm : false
+    //         });
+    //     }
+    // })
+
+    //单击添加至该子账号产品内按钮
+    $("#add-small-product").click(function () {
+            let rows = getTableSelection("#select-Wyy-product");
+            let adminPId = getTableSelection("#select-admin-product");
+            if (rows.length == 0){
+                swal({
+                    title : "请选择要共享的子账号！",
+                    type : "error",
+                    confirmButtonText : "确定",
+                    closeOnConfirm : false
+                });
+            }else {
+                var ids = [];
+                for (let i = 0; i < rows.length; i++) {
+                    ids.push(rows[i].data.id)
+                }
+                console.log("ids", ids)
+                var msg = confirm("确定共享产品到已选中的子账号中么？");
+                if (msg){
+                    $ajax({
+                        type: 'post',
+                        url: '/user/info',
+                        data : {
+                            ids :JSON.stringify(ids),
+                            id : adminPId[0].data.id
+                        },
+                    }, false, '', function (res) {
+                        if (res.code == 200) {
+                            swal("", res.msg, "success");
+                            $('#yy-account-product').modal('hide');
+                            $('#Wyy-account-product').modal('hide');
+                            $('#account-product-modal').modal('hide');
+                            $('#admin-prodect').modal('hide');
+
+                        }else {
+                            swal("", res.msg, "error");
+                        }
+                    })
+                }
+            }
+    })
+    //单击删除该子账号产品内按钮
+    $("#delete-small-product").click(function () {
+            let rows = getTableSelection("#select-yy-product");
+            let adminPId = getTableSelection("#select-admin-product");
+            if (rows.length == 0){
+                swal({
+                    title : "请选择要取消的子账号",
+                    type : "error",
+                    confirmButtonText : "确定",
+                    closeOnConfirm : false
+                });
+            }else {
+                var ids = [];
+                for (let i = 0; i < rows.length; i++) {
+                    ids.push(rows[i].data.id)
+                }
+                console.log("ids", ids)
+                var msg = confirm("确定取消共享已选中的子账号么？");
+                if (msg){
+                    $ajax({
+                        type: 'post',
+                        url: '/user/deleteCp',
+                        data : {
+                            ids :JSON.stringify(ids),
+                            id : adminPId[0].data.id
+                        },
+                    }, false, '', function (res) {
+                        if (res.code == 200) {
+                            swal("", res.msg, "success");
+                            $('#yy-account-product').modal('hide');
+                            $('#Wyy-account-product').modal('hide');
+                            $('#account-product-modal').modal('hide');
+                            $('#admin-prodect').modal('hide');
+                        }else {
+                            swal("", res.msg, "error");
+                        }
+                    })
+                }
+            }
+    })
+
+
     //新增弹窗里点击关闭按钮
     $('#add-close-btn').click(function () {
         $('#add-modal').modal('hide');
+    });
+
+    //设置弹窗里点击关闭按钮
+    $('#setting-close-btn').click(function () {
+        $('#setting-modal').modal('hide');
     });
 
     //新增弹窗里点击关闭按钮
@@ -445,6 +728,16 @@ $(function () {
                     }
                 })
             }
+        }
+    });
+
+    //设置弹窗里点击提交按钮
+    $("#setting-submit-btn").click(function () {
+        let rows = getTableSelection("#selectUser");
+        console.log(rows)
+        var params = []
+        for(var i=0; i<rows.length; i++){
+            params.push(rows[i].data)
         }
     });
 
@@ -1024,6 +1317,190 @@ function setTable(data) {
 
 }
 
+function setYyAccount(data) {
+    if ($('#select-yy-product').html != '') {
+        $('#select-yy-product').bootstrapTable('load', data);
+    }
+    $('#select-yy-product').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: 'username',
+                title: '拥有该产品的子账号',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
+function setWyyAccount(data) {
+    if ($('#select-Wyy-product').html != '') {
+        $('#select-Wyy-product').bootstrapTable('load', data);
+    }
+    $('#select-Wyy-product').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: 'username',
+                title: '未拥有该产品的子账号',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
+function setUserAccount(data) {
+    if ($('#select-samll-account').html != '') {
+        $('#select-samll-account').bootstrapTable('load', data);
+    }
+    $('#select-samll-account').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+             {
+                field: 'username',
+                title: '子账号',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
+
+
+function setAdminPc(data) {
+    if ($('#select-admin-product').html != '') {
+        $('#select-admin-product').bootstrapTable('load', data);
+    }
+
+    $('#select-admin-product').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: 'product',
+                title: '管理员产品',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
+
+
+function setPuPc(data) {
+    if ($('#select-pu-product').html != '') {
+        $('#select-pu-product').bootstrapTable('load', data);
+    }
+    $('#select-pu-product').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 50,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            },
+            {
+                field: 'product',
+                title: '子账号产品',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
 function setUserTable(data) {
     if ($('#userSelectTable').html != '') {
         $('#userSelectTable').bootstrapTable('load', data);
@@ -1084,6 +1561,193 @@ function setUserTable(data) {
         }
     })
 }
+
+function setUsers(data) {
+    $('#selectUser').bootstrapTable({
+        data: data,
+        sortStable: true,
+        classes: 'table table-hover text-nowrap table table-bordered',
+        idField: 'id',
+        clickToSelect: true,
+        locale: 'zh-CN',
+        toolbarAlign: 'left',
+        theadClasses: "thead-light",//这里设置表头样式
+        style:'table-layout:fixed',
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 40,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'username',
+                title: '子账号',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },
+            {
+                field: '',
+                title: '操作',
+                align: 'center',
+                sortable: true,
+                width:40,
+                formatter: function (value, row) {
+                    return '<button onclick="javascript:getCpById(' + row.id + ')" class="btn-sm btn-primary">产品详细</button>'}
+            },
+        ],
+    })
+}
+
+function getCpById(id){
+    $ajax({
+        type: 'post',
+        url: '/user/getCpById',
+        data : {
+            id : id
+        }
+    }, false, '', function (res) {
+        $('#setting-product').modal('show');
+        $('#selectCpByUser').bootstrapTable({
+            data: res.data,
+            sortStable: true,
+            classes: 'table table-hover text-nowrap table table-bordered',
+            idField: 'id',
+            clickToSelect: true,
+            locale: 'zh-CN',
+            toolbarAlign: 'left',
+            theadClasses: "thead-light",//这里设置表头样式
+            style:'table-layout:fixed',
+            columns: [
+                {
+                    field: '',
+                    title: '序号',
+                    align: 'center',
+                    width: 40,
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                }, {
+                    field: 'product',
+                    title: '产品',
+                    align: 'center',
+                    sortable: true,
+                    width: 80,
+                },
+                {
+                    field: '',
+                    title: '操作',
+                    align: 'center',
+                    sortable: true,
+                    width:40,
+                    formatter: function (value, row) {
+                        return '<button onclick="javascript:deleteCpById(' + row.id + ')" class="btn btn-danger">删除</button>'}
+                },
+            ],
+        })
+    })
+    //点击添加产品
+    $("#add-product").click(function () {
+        $('#show-products').modal('show');
+    })
+    $ajax({
+            type: 'post',
+            url: '/user/getTextR',
+        }, false, '', function (res) {
+        setAdmin(res.data)
+    })
+            $("#add-prodect-submit").click(function () {
+                let rows = getTableSelection("#selectAllByAdmin");
+                var ids = [];
+                for (let i = 0; i < rows.length; i++) {
+                    ids.push(rows[i].data.id)
+                }
+                console.log("ids", ids)
+                var msg = confirm("确定添加已选中的产品到该子账号中么？");
+                if (msg){
+                    $ajax({
+                        type: 'post',
+                        url: '/user/info',
+                        data : {
+                            ids :JSON.stringify(ids),
+                            userId: id
+                        },
+                    }, false, '', function (res) {
+                        if (res.code == 200) {
+                            swal("", res.msg, "success");
+                            $('#setting-modal').modal('hide');
+                            $('#setting-product').modal('hide');
+                            $('#show-products').modal('hide');
+                        }else {
+                            swal("", res.msg, "error");
+                        }
+                    })
+                }
+            })
+}
+
+function setAdmin(data) {
+    if ($('#selectAllByAdmin').html != '') {
+        $('#selectAllByAdmin').bootstrapTable('load', data);
+    }
+    $('#selectAllByAdmin').bootstrapTable({
+        data: data,
+        sortStable: true,
+        theadClasses: "thead-light",//这里设置表头样式
+        columns: [
+            {
+                field: '',
+                title: '序号',
+                align: 'center',
+                width: 40,
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'product',
+                title: '管理员产品',
+                align: 'center',
+                sortable: true,
+                width: 80,
+            },
+        ],
+        onClickRow: function (row, el) {
+            let isSelect = $(el).hasClass('selected')
+            if (isSelect) {
+                $(el).removeClass('selected')
+            } else {
+                $(el).addClass('selected')
+            }
+        },
+    })
+}
+
+
+function deleteCpById(id){
+    console.log("----id",id)
+    var msg = confirm("确认要删除吗？");
+    if (msg){
+        $ajax({
+            type: 'post',
+            url: '/user/isDelete',
+            data : {
+                id : id
+            }
+        }, false, '', function (res) {
+            if (res.code == 200) {
+                confirm("删除成功")
+            } else {
+                confirm("删除失败")
+            }
+        })
+    }
+
+}
+
+
 
 function setUserTable1(data) {
     if ($('#userSelectTable1').html != '') {
@@ -1564,3 +2228,5 @@ function downloadFileByBase64(name, base64) {
     var myUrl = URL.createObjectURL(myBlob);
     downloadFile(myUrl, name)
 }
+
+

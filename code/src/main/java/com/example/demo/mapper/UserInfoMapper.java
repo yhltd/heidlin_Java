@@ -24,8 +24,29 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     @Select("select * from userInfo where power = '用户'")
     List<UserInfo> getUserList();
 
+    @Select("select id, username from userInfo where power = '用户'")
+    List<UserInfo> selectUserByAccount();
+
+    @Select("select id, power from userInfo where username = #{userName}")
+    UserInfo selectUserIdByUserName(String userName);
+
+    @Select("select id, username, password, name, power, department, change from userInfo where id = #{id}")
+    UserInfo selectXxByUserId(Integer userId);
+
+    @Select("select * from userInfo where power = '用户'")
+    List<UserInfo> getUserAll();
+
     @Select("select MAX(id) as id from userInfo")
     List<UserInfo> getListid();
+
+    @Select("select id, product from textRestrictions WHERE founder = '管理员'")
+    List<TextRestrictions> getTextR();
+
+    @Select("select id, product from textRestrictions WHERE founder = #{id}")
+    List<TextRestrictions> getTextCpById(String id);
+
+    @Select("select id, product, founder from textRestrictions WHERE text_id = #{textId}")
+    List<TextRestrictions> selectByTextId(Integer textId);
 
 //    @Insert("insert into userinfo(username,password,name,department,power) values(#{add_username},#{add_password},#{add_name},#{add_department},#{power})")
 //    boolean useradd(String add_username, String add_password, String add_name, String add_department, String add_power);
