@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>产品设置</title>
+    <link rel="shortcut icon" href="#"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="../js/Jquery.js"></script>
+    <script type="text/javascript" src="../js/jquerysession.js"></script>
+
+
+    <link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-4.5.0-dist/icons/bootstrap-icons.css">
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+
+    <!--bootstrap-table-->
+    <link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap-table.css">
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/bootstrap-table.js"></script>
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/colResizable-1.6.js"></script>
+    <script type="text/javascript" src="../bootstrap-4.5.0-dist/js/bootstrap-table-resizable.js"></script>
+
+    <link rel="stylesheet" href="../css/sweetalert.css">
+    <script type="text/javascript" src="../js/sweetalert-dev.js"></script>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <script type="text/javascript" src="../js/main.js"></script>
+    <script type="text/javascript" src="../js/textRestrictions.js"></script>
+</head>
+
+<body class="pt-2">
+<div class="top-toolbar row">
+    <div class="col-md-3 mb-2">
+        <input id="this_column" type="text" class="form-control" placeholder="产品名称" autocomplete="off">
+    </div>
+    <div class="col-md-2 mb-2">
+        <button id="select-btn" class="btn btn-primary">
+            <i class="bi bi-search icon"></i>
+            查询
+        </button>
+    </div>
+</div>
+
+<div id="table-toolbar">
+    <div class="btn-group" role="group">
+        <button id="refresh-btn" class="btn btn-primary">
+            <i class="bi bi-arrow-clockwise icon"></i>
+            刷新
+        </button>
+        <button id="add-btn" class="btn btn-primary">
+            <i class="bi bi-plus-square icon"></i>
+            新增一行
+        </button>
+        <button id="delete-btn" class="btn btn-primary">
+            <i class="bi bi-trash icon"></i>
+            删除
+        </button>
+        <button id="share-btn" class="btn btn-primary">
+            <i class="bi bi-search icon"></i>
+            查询共享
+        </button>
+<!--        <button id="share-del-btn" class="btn btn-primary">-->
+<!--            <i class="bi bi-search icon"></i>-->
+<!--            删除共享-->
+<!--        </button>-->
+<!--        <button id="share-set-btn" class="btn btn-primary">-->
+<!--            <i class="bi bi-search icon"></i>-->
+<!--            设置共享-->
+<!--        </button>-->
+<!--        <button id="share-setting" class="btn btn-primary">-->
+<!--            <i class="bi bi-plus-square icon"></i>-->
+<!--            设置账号产品-->
+<!--        </button>-->
+        <button id="share-setting" class="btn btn-primary">
+            <i class="bi bi-plus-square icon"></i>
+            设置账号产品
+        </button>
+<!--        <button id="set-account-product" class="btn btn-primary">-->
+<!--            <i class="bi bi-plus-square icon"></i>-->
+<!--            设置账号产品-->
+<!--        </button>-->
+<!--        <button id="set-del-share-btn" class="btn btn-primary">-->
+<!--            <i class="bi bi-search icon"></i>-->
+<!--            设置子账号共享-->
+<!--        </button>-->
+        <a class="btn btn-primary" style="color: white;padding-top: 8px">当前页：产品设置</a>
+    </div>
+</div>
+
+<input type="file" id="file" hidden="hidden">
+
+<div id="upd_1" class="alert alert-success alert-dismissible" hidden="hidden" style="float:right;margin-bottom: 0;margin-top: 20px;margin-right: 10px;">
+    <strong>保存成功!</strong>
+</div>
+<div id="upd_2" class="alert alert-danger alert-dismissible"  hidden="hidden" style="float:right;margin-bottom: 0;margin-top: 20px;margin-right: 10px;">
+    <strong>保存失败!</strong>
+</div>
+
+<div class="table-div border-top">
+    <table id="userTable"></table>
+</div>
+
+<div id="account-product-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <button id="add-small-account" type="button" class="btn btn-primary">查询产品</button>
+                </div>
+                <button type="button" id="close-all" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div id="admin-prodect">
+                                <table id="select-admin-product"></table>
+                            </div>
+<!--                            <div id="small-account">-->
+<!--                                <table id="select-samll-account"></table>-->
+<!--                            </div>-->
+<!--                            <input id="input-account" placeholder="请输入子账号" name="username" type="text" class="form-control" autocomplete="off">-->
+                        </div>
+                        <div class="col-sm">
+                            <div id="yy-account-product">
+                                <table id="select-yy-product"></table>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div id="Wyy-account-product">
+                                <table id="select-Wyy-product"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top" style="padding: 15px; display: flex; flex-direction: row; justify-content: space-between">
+                <button id="delete-small-product" type="button" class="btn btn-danger">
+                    取消共享该子账号产品
+                </button>
+                <button id="add-small-product" type="button" class="btn btn-info">
+                    共享至该子账号中
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="add-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">共享</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 800px">
+                <table id="userSelectTable"></table>
+            </div>
+
+            <div class="border-top" style="padding: 15px;">
+                <button id="add-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+<!--                    <a href="randomText.html">提交</a>-->
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="setting-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 800px">
+                <table id="selectUser"></table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div id="setting-product" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-header">
+                <button id="add-product" type="button" class="btn btn-info">添加产品</button>
+            </div>
+            <div class="modal-body" style="max-height: 800px">
+                <table id="selectCpByUser"></table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="show-products" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">选择需要添加到该子账号的产品</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: 800px">
+                <table id="selectAllByAdmin"></table>
+            </div>
+            <div class="border-top" style="padding: 15px;">
+                <button id="add-prodect-submit" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    添加
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="share-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">共享</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 800px">
+                <table id="userSelectTable1"></table>
+            </div>
+
+            <div class="border-top" style="padding: 15px;">
+                <button id="share-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    <!--                    <a href="randomText.html">提交</a>-->
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="share1-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">共享</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 700px">
+                <table id="textSelectTable1"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="share-del-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">选择子账号</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 800px">
+                <table id="userSelectTable2"></table>
+            </div>
+
+            <div class="border-top" style="padding: 15px;">
+                <button id="share-del-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    <!--                    <a href="randomText.html">提交</a>-->
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="share-del-modal1" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">删除共享</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 800px">
+                <table id="textSelectTable2"></table>
+            </div>
+
+            <div class="border-top" style="padding: 15px;">
+                <button id="share-del-submit-btn1" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    <!--                    <a href="randomText.html">提交</a>-->
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="share-set-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">选择子账号</div>
+                <button id="clear-select" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 800px">
+                <table id="userSelectTable3"></table>
+            </div>
+
+            <div class="border-top" style="padding: 15px;">
+                <button id="share-set-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    <!--                    <a href="randomText.html">提交</a>-->
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="share-set-modal1" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">设置共享</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 800px">
+                <table id="textSelectTable3"></table>
+            </div>
+
+            <div class="border-top" style="padding: 15px;">
+                <button id="share-set-submit-btn1" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    <!--                    <a href="randomText.html">提交</a>-->
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="add1-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">编辑</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add1-form" class="needs-validation">
+                    <div class="form-group">
+                        <input id="idd2" name="id" type="hidden">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-username">用户名</label>
+                        <input id="update-username" name="username" type="text" class="form-control" autocomplete="off">
+                    </div>
+                </form>
+            </div>
+            <div class="border-top" style="padding: 15px;">
+                <button id="add1-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    提交
+                </button>
+                <button id="add1-close-btn" type="button" class="btn btn-primary left-margin">
+                    <i class="bi bi-x-circle icon"></i>
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="update-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">编辑</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="update-form" class="needs-validation">
+                    <div class="form-group">
+                        <input id="id" name="id" type="hidden">
+                    </div>
+                    <div class="form-group">
+                        <input id="update-founder" name="founder" type="hidden" data-required="1">
+                    </div>
+                    <div class="form-group">
+                        <input id="update-textId" name="textId" type="hidden" data-required="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-product">产品名称</label>
+                        <input id="update-product"  name="product" type="text" class="form-control" autocomplete="off">
+                        <div class="invalid-feedback">
+                            请输入产品名称！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button id="duplicate-settings-btn" type="button" class="btn btn-info">
+                            <i class="bi bi-repeat icon">重复设置</i>
+                            重复设置
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-columntext">列标</label>
+                        <textarea id="update-columntext" rows="5" name="columntext" type="text" class="form-control" autocomplete="off"></textarea>
+                        <div class="invalid-feedback">
+                            请输入列标！
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-num">数量规定</label>
+                        <textarea id="update-num" rows="5" name="num" type="number" class="form-control" autocomplete="off"></textarea>
+                        <div class="invalid-feedback">
+                            请输入数量规定！
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="border-top" style="padding: 15px;">
+                <button id="update-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    提交
+<!--                    <a href="javascript:history.go(-1)">提交</a>-->
+                </button>
+                <button id="update-close-btn" type="button" class="btn btn-primary left-margin">
+                    <i class="bi bi-x-circle icon"></i>
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="delete-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">提示</div>
+            </div>
+            <div id="delete-modal-body" class="modal-body">
+                确定删除吗？
+            </div>
+            <div class="border-top" style="padding: 15px;">
+                <button id="delete-submit-btn" type="button" class="btn btn-primary">
+                    <i class="bi bi-arrow-bar-up icon"></i>
+                    确定
+                </button>
+                <button id="delete-close-btn" type="button" class="btn btn-primary left-margin">
+                    <i class="bi bi-x-circle icon"></i>
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop='static'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">提示</h4>
+            </div>
+            <div class="modal-body">
+                文件生成中，请稍候。<span id="result"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div id="set-del-share-modal" class="modal fade" tabindex="-1">-->
+<!--    <div class="modal-dialog modal-lg">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <div class="modal-title">选择一个子账号</div>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+
+<!--            <div class="modal-body" style="max-height: 800px">-->
+<!--                <table id="userSelectTable4"></table>-->
+<!--            </div>-->
+<!--            <div class="modal-body" style="max-height: 800px">-->
+<!--                <table id="textSelectTable4"></table>-->
+<!--            </div>-->
+
+<!--            <div class="border-top" style="padding: 15px;">-->
+<!--                <button id="sel-submit-btn" type="button" class="btn btn-primary">-->
+<!--                    <i class="bi bi-arrow-bar-up icon"></i>-->
+<!--                    查看共享-->
+<!--                </button>-->
+<!--                <button id="del-submit-btn" type="button" class="btn btn-primary">-->
+<!--                    <i class="bi bi-arrow-bar-up icon"></i>-->
+<!--                    删除-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="pagination">
+    <button id="prev-page">上一页</button>
+
+    <!-- 页码按钮容器 -->
+    <div id="page-buttons" class="btn-group">
+        <!-- 动态生成的页码按钮会插入到这里 -->
+    </div>
+
+    <button id="next-page">下一页</button>
+    <span id="page-info"></span>
+</div>
+</body>
+</html>
