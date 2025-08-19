@@ -251,4 +251,24 @@ public class TextRestrictions {
      */
     private String prop20;
 
+    private String quchong1;
+
+    private String quchong2;
+
+    private String quchong3;
+
+    private String quchong4;
+
+    private String      quchong5;
+
+    private String quchong6;
+
+    private String quchong7;
+
+    private String quchong8;
+
+    private String quchong9;
+
+    private String quchong10;
+
 }

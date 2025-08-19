@@ -145,6 +145,7 @@ public class RandomTextController {
             Map<Integer, Integer> textNumMap = buildTextNumMap(textRestrictionsService.getListById(mubanId));
             Map<String, String> qinquanMap = buildQinquanMap(infringementService.getList());
             Map<String, String[]> replacementMap = buildReplacementMap(textRestrictionsService.getListById(mubanId));
+            Map<String, Integer> wordRepeatLimitMap = buildWordRepeatLimitMap(textRestrictionsService.getListById(mubanId));
 
             FileInputStream fis = new FileInputStream(StringUtils.base64ToFile(excel));
             Workbook wb = houzhui.equals(".xlsx") ? new XSSFWorkbook(fis) : new HSSFWorkbook(fis);
@@ -184,6 +185,11 @@ public class RandomTextController {
                     // 7. 优化替换逻辑
                     processPlaceholders(sb, replacementMap, random);
 
+                    // 2. 检查单词重复（新增）
+                    String columnLetter = getColumnLetter(j); // 新增方法获取列字母
+                    applyWordRepeatLimit(sb, columnLetter, wordRepeatLimitMap);
+
+
                     // 8. 应用长度限制
                     applyLengthLimit(sb, j, textNumMap);
 
@@ -191,12 +197,15 @@ public class RandomTextController {
                     applyInfringementReplacements(sb, qinquanMap, qinquanPatterns);
 
                     cell.setCellValue(sb.toString());
+
                 }
 
                 if (i % 100 == 0) {
                     log.info("处理进度: {}/{}", i, sheet.getLastRowNum());
                 }
             }
+
+
 
             File PDFFilePath = new File("codeExecl.xls");
             FileOutputStream exportXls = new FileOutputStream(PDFFilePath);
@@ -369,6 +378,95 @@ public class RandomTextController {
                 }
             }
         }
+
+
+//
+    private String getColumnLetter(int columnIndex) {
+        return String.valueOf((char) ('A' + columnIndex));
+    }
+
+    private void applyWordRepeatLimit(StringBuilder sb, String columnLetter,
+                                      Map<String, Integer> wordRepeatLimitMap) {
+        // 1. 参数检查
+        if (wordRepeatLimitMap == null || columnLetter == null || sb == null) {
+            return;
+        }
+
+        // 2. 获取重复限制次数
+        Integer maxRepeats = wordRepeatLimitMap.get(columnLetter);
+        if (maxRepeats == null || maxRepeats <= 0) return;
+
+        // 3. 获取文本内容
+        String text = sb.toString();
+        if (text == null || text.isEmpty()) return;
+
+        // 4. 分割单词
+        String[] words = text.split("[\\s+,;.!?]+");
+        if (words.length == 0) return;
+
+        // 5. 统计单词出现次数
+        Map<String, Integer> wordCounts = new HashMap<>();
+        List<String> keptWords = new ArrayList<>();
+
+        for (String word : words) {
+            if (word == null || word.isEmpty()) continue;
+
+            int count = wordCounts.getOrDefault(word, 0) + 1;
+            if (count <= maxRepeats) {
+                keptWords.add(word);
+                wordCounts.put(word, count);
+            }
+        }
+
+        // 6. 如果去重后有变化，则更新单元格内容
+        if (keptWords.size() < words.length) {
+            sb.setLength(0);
+            sb.append(String.join(" ", keptWords));
+        }
+    }
+
+
+
+
+    private Map<String, Integer> buildWordRepeatLimitMap(List<TextRestrictions> restrictions) {
+        Map<String, Integer> map = new HashMap<>();
+        if (restrictions == null || restrictions.isEmpty()) return map;
+
+        for (TextRestrictions tr : restrictions) {
+            if (tr == null) continue;
+
+            try {
+                processColumnLimit(map, tr.getColumntext1(), tr.getQuchong1());
+                processColumnLimit(map, tr.getColumntext2(), tr.getQuchong2());
+                processColumnLimit(map, tr.getColumntext3(), tr.getQuchong3());
+                processColumnLimit(map, tr.getColumntext4(), tr.getQuchong4());
+                processColumnLimit(map, tr.getColumntext5(), tr.getQuchong5());
+                processColumnLimit(map, tr.getColumntext6(), tr.getQuchong6());
+                processColumnLimit(map, tr.getColumntext7(), tr.getQuchong7());
+                processColumnLimit(map, tr.getColumntext8(), tr.getQuchong8());
+                processColumnLimit(map, tr.getColumntext9(), tr.getQuchong9());
+                processColumnLimit(map, tr.getColumntext10(), tr.getQuchong10());
+            } catch (Exception e) {
+                log.error("Error processing text restrictions", e);
+            }
+        }
+        return map;
+    }
+
+    private void processColumnLimit(Map<String, Integer> map, String columnText, String quchongValue) {
+        if (columnText != null && quchongValue != null) {
+            String columnLetter = columnText.trim();
+            if (!columnLetter.isEmpty()) {
+                try {
+                    map.put(columnLetter, Integer.parseInt(quchongValue.trim()));
+                } catch (NumberFormatException e) {
+                    log.warn("Invalid number format for Quchong value: {}", quchongValue);
+                }
+            }
+        }
+    }
+
+
 
     /**
      * 方法说明: 列号转数字

@@ -64,7 +64,7 @@ public class TextRestrictionsController {
     public Result<PageInfo<TextRestrictions>> getListByUserPage(
             @RequestParam String userId,
             @RequestParam(defaultValue = "1") int pageNum,
-            @RequestParam(defaultValue = "50") int pageSize) {
+            @RequestParam(defaultValue = "1000") int pageSize) {
 
         // 参数校验
         if (pageNum < 1) pageNum = 1;

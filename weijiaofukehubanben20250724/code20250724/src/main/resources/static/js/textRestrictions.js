@@ -1222,39 +1222,61 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     return '<button onclick="javascript:pass(' + row.id + ')" class="btn-sm btn-primary">打开模板</button> <button onclick="javascript:upload_file(' + row.id + ')" class="btn-sm btn-primary">上传</button>'                }
             },
-            {
-                field: 'duplicate_cfpd',
-                title: '重复设置',
-                align: 'center',
-                width: 150,
-                formatter: function(value, row, index) {
-                    return `
-            <div class="duplicate-setting-container">
-                <select class="form-control duplicate-col" data-row="${row.id}">
-                    <option value="">请选择列名</option>
-                    <option value="product">产品名称</option>
-                    <option value="col2">操作</option>
-                    <option value="columntext1">列标/数量规定1</option>
-                    <option value="columntext2">列标/数量规定2</option>
-                    <option value="columntext3">列标/数量规定3</option>
-                    <option value="columntext4">列标/数量规定4</option>
-                    <option value="columntext5">列标/数量规定5</option>
-                    <option value="columntext6">列标/数量规定6</option>
-                    <option value="columntext7">列标/数量规定7</option>
-                    <option value="columntext8">列标/数量规定8</option>
-                    <option value="columntext9">列标/数量规定9</option>
-                    <option value="columntext10">列标/数量规定10</option>
-                </select>
-                <input type="number" min="1" class="form-control duplicate-max" 
-                       data-row="${row.id}" placeholder="最大重复" style="margin-top:5px;">
-                <button class="btn btn-sm btn-primary apply-duplicate-btn" 
-                        data-row="${row.id}" style="margin-top:5px;">
-                    应用设置
-                </button>
-            </div>
-        `;
-                }
-            }, {
+        //     {
+        //         field: 'duplicate_cfpd',
+        //         title: '重复设置',
+        //         align: 'center',
+        //         width: 150,
+        //         formatter: function(value, row, index) {
+        //             return `
+        //     <div class="duplicate-setting-container">
+        //         <select class="form-control duplicate-col" data-row="${row.id}">
+        //             <option value="">请选择列名</option>
+        //             <option value="product">产品名称</option>
+        //             <option value="col2">操作</option>
+        //             <option value="columntext1">列标/数量规定1</option>
+        //             <option value="columntext2">列标/数量规定2</option>
+        //             <option value="columntext3">列标/数量规定3</option>
+        //             <option value="columntext4">列标/数量规定4</option>
+        //             <option value="columntext5">列标/数量规定5</option>
+        //             <option value="columntext6">列标/数量规定6</option>
+        //             <option value="columntext7">列标/数量规定7</option>
+        //             <option value="columntext8">列标/数量规定8</option>
+        //             <option value="columntext9">列标/数量规定9</option>
+        //             <option value="columntext10">列标/数量规定10</option>
+        //         </select>
+        //         <input type="number" min="1" class="form-control duplicate-max"
+        //                data-row="${row.id}" placeholder="最大重复" style="margin-top:5px;">
+        //         <button class="btn btn-sm btn-primary apply-duplicate-btn"
+        //                 data-row="${row.id}" style="margin-top:5px;">
+        //             应用设置
+        //         </button>
+        //     </div>
+        // `;
+        //         }
+        //     },
+
+            // {
+            //     field: 'columntext1',
+            //     title: '列标/数量规定1',
+            //     align: 'center',
+            //     sortable: true,
+            //     width:150,
+            //     formatter: function (value, row, index) {
+            //         var this_columntext = row.columntext1
+            //         var this_num = row.num1
+            //         if(this_columntext == null){
+            //             this_columntext = ""
+            //         }
+            //         if(this_num == null){
+            //             this_num = ""
+            //         }
+            //         return '<input id="columntext1' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext1\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num1' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num1\'' + ')" value="' + this_num + '" class="form-control"  >'
+            //     }
+            // }
+
+
+                {
                 field: 'columntext1',
                 title: '列标/数量规定1',
                 align: 'center',
@@ -1263,13 +1285,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext1
                     var this_num = row.num1
+                    var this_quchong = row.quchong1
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext1' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext1\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num1' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num1\'' + ')" value="' + this_num + '" class="form-control"  >'
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext1' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext1\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num1' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num1\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong1' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong1\'' + ')" value="' + this_quchong + '" class="form-control"  >'
                 }
             }, {
                 field: 'columntext2',
@@ -1280,13 +1306,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext2
                     var this_num = row.num2
+                    var this_quchong = row.quchong2
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext2' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext2\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num2' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num2\'' + ')" value="' + this_num + '" class="form-control"  >'                }
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext2' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext2\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num2' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num2\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong2' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong2\'' + ')" value="' + this_quchong + '" class="form-control"  >'                }
             }, {
                 field: 'columntext3',
                 title: '列标/数量规定3',
@@ -1296,13 +1326,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext3
                     var this_num = row.num3
+                    var this_quchong = row.quchong3
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext3' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext3\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num3' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num3\'' + ')" value="' + this_num + '" class="form-control"  >'                }
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext3' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext3\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num3' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num3\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong3' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong3\'' + ')" value="' + this_quchong + '" class="form-control"  >'                }
             }, {
                 field: 'columntext4',
                 title: '列标/数量规定4',
@@ -1312,13 +1346,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext4
                     var this_num = row.num4
+                    var this_quchong = row.quchong4
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext4' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext4\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num4' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num4\'' + ')" value="' + this_num + '" class="form-control"  >'                }
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext4' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext4\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num4' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num4\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong4' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong4\'' + ')" value="' + this_quchong + '" class="form-control"  >'                }
             }, {
                 field: 'columntext5',
                 title: '列标/数量规定5',
@@ -1328,13 +1366,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext5
                     var this_num = row.num5
+                    var this_quchong = row.quchong5
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext5' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext5\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num5' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num5\'' + ')" value="' + this_num + '" class="form-control"  >'                }
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext5' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext5\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num5' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num5\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong5' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong5\'' + ')" value="' + this_quchong + '" class="form-control"  >'                }
             }, {
                 field: 'columntext6',
                 title: '列标/数量规定6',
@@ -1344,13 +1386,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext6
                     var this_num = row.num6
+                    var this_quchong = row.quchong6
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext6' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext6\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num6' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num6\'' + ')" value="' + this_num + '" class="form-control"  >'                }
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext6' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext6\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num6' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num6\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong6' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong6\'' + ')" value="' + this_quchong + '" class="form-control"  >'                }
             }, {
                 field: 'columntext7',
                 title: '列标/数量规定7',
@@ -1360,13 +1406,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext7
                     var this_num = row.num7
+                    var this_quchong = row.quchong7
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext7' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext7\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num7' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num7\'' + ')" value="' + this_num + '" class="form-control"  >'                }
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext7' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext7\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num7' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num7\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong7' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong7\'' + ')" value="' + this_quchong + '" class="form-control"  >'                }
             }, {
                 field: 'columntext8',
                 title: '列标/数量规定8',
@@ -1376,13 +1426,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext8
                     var this_num = row.num8
+                    var this_quchong = row.quchong8
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext8' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext8\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num8' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num8\'' + ')" value="' + this_num + '" class="form-control"  >'                }
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext8' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext8\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num8' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num8\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong8' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong8\'' + ')" value="' + this_quchong + '" class="form-control"  >'                }
             }, {
                 field: 'columntext9',
                 title: '列标/数量规定9',
@@ -1392,13 +1446,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext9
                     var this_num = row.num9
+                    var this_quchong = row.quchong9
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext9' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext9\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num9' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num9\'' + ')" value="' + this_num + '" class="form-control"  >'                }
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext9' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext9\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num9' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num9\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong9' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong9\'' + ')" value="' + this_quchong + '" class="form-control"  >'                }
             }, {
                 field: 'columntext10',
                 title: '列标/数量规定10',
@@ -1408,13 +1466,17 @@ function setTable(data,pageInfo) {
                 formatter: function (value, row, index) {
                     var this_columntext = row.columntext10
                     var this_num = row.num10
+                    var this_quchong = row.quchong10
                     if(this_columntext == null){
                         this_columntext = ""
                     }
                     if(this_num == null){
                         this_num = ""
                     }
-                    return '<input id="columntext10' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext10\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num10' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num10\'' + ')" value="' + this_num + '" class="form-control"  >'                }
+                    if(this_quchong == null){
+                        this_quchong = ""
+                    }
+                    return '<input id="columntext10' + row.id + '" oninput="javascript:columnUpd(' + row.id + ',' + '\'columntext10\'' + ')" value="' + this_columntext + '" class="form-control"  >' + "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="num10' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'num10\'' + ')" value="' + this_num + '" class="form-control"  >'+ "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=3)\" width=\"100%\" color=#dee2e6 SIZE=3>" + '<input id="quchong10' + row.id + '" type="number" oninput="javascript:columnUpd(' + row.id + ',' + '\'quchong10\'' + ')" value="' + this_quchong + '" class="form-control"  >'                }
             }
         ],
         onClickRow: function (row, el) {
